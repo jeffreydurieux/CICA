@@ -11,6 +11,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
 
   #### output ####
   #test
+  # test ok
 
 
 }
