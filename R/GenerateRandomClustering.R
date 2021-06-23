@@ -8,7 +8,6 @@
 #'
 #'@keywords internal
 #'
-#' @examples
 #'
 GenerateRandomClustering <- function(nElement , nClust , Prob = NULL)
 {

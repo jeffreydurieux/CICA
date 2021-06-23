@@ -19,7 +19,4 @@ GenerateRandomClustering(nElement, nClust, Prob = NULL)
 \description{
 Generate random clustering
 }
-\examples{
-
-}
 \keyword{internal}
