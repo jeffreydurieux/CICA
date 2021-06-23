@@ -26,9 +26,15 @@ AdjustProb <- function(v , MaxElem)
   }#### replace(v,which(v<1),1)
 
   it <- 1
-  while (!(sum(v) == MaxElem))
+  while (!(sum(v) == MaxElem) | it == 500000)
   {
-    cat(it,'\n')
+    if(it == 1){
+      cat('Searching for suitable random start clustering \n')
+    }
+    if(it == 499999){
+      stop('No suitable start clustering found, select fewer clusters or select clusters as max number of objects (i.e., length(DataList)')
+    }
+    #cat(it,'\n')
     it <- it + 1
     diff = sum(v) - MaxElem
     if (diff < 0)
