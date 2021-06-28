@@ -3,7 +3,6 @@
 #' @param DataList list with data matrices
 #' @param SrList list with Group ICA RSN parameters
 #'
-#' @return
 #'
 #' @keywords internal
 #'

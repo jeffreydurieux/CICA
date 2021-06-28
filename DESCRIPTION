@@ -3,7 +3,10 @@ Type: Package
 Title: Clusterwise Independent Component Analysis
 Version: 0.1.0
 Date: 2021-06-23
-Depends: ica, NMFN
+Depends: 
+    ica,
+    NMFN,
+    R (>= 2.10)
 Author: Jeffrey Durieux
 Maintainer: Jeffrey Durieux <durieux.jeffrey@gmail.com>
 Description: Clustering multi-subject resting state fMRI data. This methods enables the clustering of subjects based on multi-subject resting state functional MRI data. Objects are clustered based on similarities and differences in cluster-specific ICA estimated components.

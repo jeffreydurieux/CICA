@@ -3,7 +3,6 @@
 #' @param Xi a single datablock
 #' @param value desired sum of squares value of the datablock
 #'
-#' @return
 #' @keywords internal
 
 xscale <- function(Xi, value = 1000){

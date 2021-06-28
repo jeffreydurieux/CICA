@@ -11,9 +11,6 @@ AdjustProb(v, MaxElem)
 
 \item{MaxElem}{number of elements}
 }
-\value{
-
-}
 \description{
 AdjustProb
 }

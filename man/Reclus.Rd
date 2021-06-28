@@ -11,9 +11,6 @@ Reclus(DataList, SrList)
 
 \item{SrList}{list with Group ICA RSN parameters}
 }
-\value{
-
-}
 \description{
 Title
 }

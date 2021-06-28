@@ -3,7 +3,6 @@
 #' @param DataList a list object to perform Group ICAs on
 #' @param nComp number of ICA components to extract
 #'
-#' @return
 #'
 #' @keywords internal
 #'

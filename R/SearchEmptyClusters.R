@@ -4,7 +4,6 @@
 #' @param newcluster newly updated clustering vector P
 #' @param SSminvec loss function values per data block
 #'
-#' @return
 #' @keywords internal
 #'
 SearchEmptyClusters <- function(nClus, newcluster, SSminVec) {

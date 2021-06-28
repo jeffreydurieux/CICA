@@ -3,7 +3,6 @@
 #' @param Xi datablock
 #' @param SkL list with Group ICA parameters
 #'
-#' @return
 #' @keywords internal
 #'
 Lir <- function(Xi, SkL)

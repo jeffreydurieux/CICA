@@ -11,9 +11,6 @@ Lir(Xi, SkL)
 
 \item{SkL}{list with Group ICA parameters}
 }
-\value{
-
-}
 \description{
 Compute loss per data matrix using multivariate regression
 }

@@ -11,9 +11,6 @@ ExtractICA(DataList, nComp)
 
 \item{nComp}{number of ICA components to extract}
 }
-\value{
-
-}
 \description{
 Extract Group ICA parameters
 }

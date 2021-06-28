@@ -14,7 +14,12 @@
 #' @param rational optional numeric vector, a (pseudo) rational starting cluster
 #' @param maxiter maximum number of iterations for each start
 #' @param verbose print loss information to console
-#' @return
+#' @return \item{P}{partitioning vector of size \code{length(DataList)}}
+#' \item{Sr}{list of size \code{nClus}, containing cluster specific independent components}
+#' \item{Ais}{list of size \code{length(DataList)}, containing subject specific time courses}
+#' \item{Loss}{loss function value of the best start}
+#' \item{LossStarts}{loss function values of all starts}
+#'
 #' @export
 #'
 #'@author Jeffrey Durieux

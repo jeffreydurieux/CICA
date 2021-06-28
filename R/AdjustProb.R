@@ -3,7 +3,6 @@
 #' @param v a numeric vector
 #' @param MaxElem number of elements
 #'
-#' @return
 #' @keywords internal
 #'
 AdjustProb <- function(v , MaxElem)

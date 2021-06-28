@@ -13,9 +13,6 @@ GenerateRandomClustering(nElement, nClust, Prob = NULL)
 
 \item{Prob}{numeric vector: Portion of elements in each cluster}
 }
-\value{
-
-}
 \description{
 Generate random clustering
 }

@@ -11,9 +11,6 @@ xscale(Xi, value = 1000)
 
 \item{value}{desired sum of squares value of the datablock}
 }
-\value{
-
-}
 \description{
 Scale data blocks to have an equal sum of squares
 }

@@ -4,7 +4,6 @@
 #' @param nClust a positive integer: Number of clusters
 #' @param Prob numeric vector: Portion of elements in each cluster
 #'
-#' @return
 #'
 #'@keywords internal
 #'

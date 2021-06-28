@@ -13,9 +13,6 @@ SearchEmptyClusters(nClus, newcluster, SSminVec)
 
 \item{SSminvec}{loss function values per data block}
 }
-\value{
-
-}
 \description{
 Search for empty clusters
 }

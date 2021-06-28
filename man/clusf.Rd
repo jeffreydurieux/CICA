@@ -11,9 +11,6 @@ clusf(nBlocks, nClus)
 
 \item{nClus}{number of clusters}
 }
-\value{
-
-}
 \description{
 Random clustering generation
 }
