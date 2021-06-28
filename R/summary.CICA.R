@@ -8,8 +8,7 @@
 #'
 #' @examples
 #' data('ExampleData', package = 'CICA')
-#' inputdata <- ExampleData$XE
-#' output <- CICA(DataList = inputdata, nStarts = 3, nComp = 5, nClus = 3, verbose = FALSE)
+#' output <- CICA(DataList = ExampleData, nStarts = 3, nComp = 5, nClus = 3, verbose = FALSE)
 #' summary(output)
 summary.CICA <- function(object, ...){
 

@@ -5,7 +5,7 @@
 \alias{ExampleData}
 \title{Example data for CICA}
 \format{
-An object of class \code{list} of length 5.
+An object of class \code{list} of length 9.
 }
 \usage{
 data(ExampleData)
