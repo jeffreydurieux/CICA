@@ -15,7 +15,7 @@ ConcData(DataList, ClusVec)
 list with concatenated datablocks
 }
 \description{
-Concatenate datablocks into list determined by cluster labels
+Internal function for CICA package
 }
 \author{
 Jeffrey Durieux

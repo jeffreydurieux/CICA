@@ -1,5 +1,5 @@
 #' Generate random clustering
-#'
+#' @description Internal function for CICA package
 #' @param nElement a positive integer number of elements to be clusterd
 #' @param nClust a positive integer: Number of clusters
 #' @param Prob numeric vector: Portion of elements in each cluster
@@ -7,7 +7,7 @@
 #'
 #'@keywords internal
 #'
-#'
+#' @return a numeric vector indicating the clustering
 GenerateRandomClustering <- function(nElement , nClust , Prob = NULL)
 {
   ####GenerateRandomClustering = for Random Starts
@@ -31,19 +31,17 @@ GenerateRandomClustering <- function(nElement , nClust , Prob = NULL)
 
   if (!(length(Prob) == nClust))
   {
-    cat('there should be as much probabilities as clusters')
     ErrorEncountered = T
   }
 
   if ((abs(sum(Prob) - 1) > .000000001) | (any(Prob < 0)))
   {
-    cat('probabilities should sum to one (and cannot be negative)')
+
     ErrorEncountered = T
   }
 
   if (!(any(nClust == 1:nElement)))
   {
-    cat("nClus should be a number between 1 and maximal number of datamatrices (length of DataList)")
     ErrorEncountered = T
   }
 

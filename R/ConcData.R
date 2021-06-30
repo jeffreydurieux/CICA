@@ -1,5 +1,5 @@
 #' Concatenate datablocks into list determined by cluster labels
-#'
+#'@description Internal function for CICA package
 #' @param DataList list with datablocks
 #' @param ClusVec  vector with cluster labels
 #'

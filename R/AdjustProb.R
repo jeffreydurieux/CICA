@@ -1,10 +1,11 @@
 #' AdjustProb
 #'
-#' @param v a numeric vector
+#' @param v a numeric vector of probabilities of length nClust
 #' @param MaxElem number of elements
 #'
 #' @keywords internal
 #'
+#' @return a numeric vector with adjusted probabilities
 AdjustProb <- function(v , MaxElem)
 {
   # INPUT
@@ -27,13 +28,10 @@ AdjustProb <- function(v , MaxElem)
   it <- 1
   while (!(sum(v) == MaxElem) | it == 500000)
   {
-    if(it == 1){
-      cat('Searching for suitable random start clustering \n')
-    }
     if(it == 499999){
       stop('No suitable start clustering found, select fewer clusters or select clusters as max number of objects (i.e., length(DataList)')
     }
-    #cat(it,'\n')
+
     it <- it + 1
     diff = sum(v) - MaxElem
     if (diff < 0)

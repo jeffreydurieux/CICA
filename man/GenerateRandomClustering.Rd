@@ -13,7 +13,10 @@ GenerateRandomClustering(nElement, nClust, Prob = NULL)
 
 \item{Prob}{numeric vector: Portion of elements in each cluster}
 }
+\value{
+a numeric vector indicating the clustering
+}
 \description{
-Generate random clustering
+Internal function for CICA package
 }
 \keyword{internal}

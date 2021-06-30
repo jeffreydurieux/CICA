@@ -1,10 +1,10 @@
 #' Compute loss per data matrix using multivariate regression
-#'
+#'@description Internal function for CICA package
 #' @param Xi datablock
 #' @param SkL list with Group ICA parameters
 #'
 #' @keywords internal
-#'
+#' @return a numeric vector with loss function values
 Lir <- function(Xi, SkL)
 {
   # compute Ahats

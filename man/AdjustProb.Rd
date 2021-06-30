@@ -7,9 +7,12 @@
 AdjustProb(v, MaxElem)
 }
 \arguments{
-\item{v}{a numeric vector}
+\item{v}{a numeric vector of probabilities of length nClust}
 
 \item{MaxElem}{number of elements}
+}
+\value{
+a numeric vector with adjusted probabilities
 }
 \description{
 AdjustProb

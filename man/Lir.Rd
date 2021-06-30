@@ -11,7 +11,10 @@ Lir(Xi, SkL)
 
 \item{SkL}{list with Group ICA parameters}
 }
+\value{
+a numeric vector with loss function values
+}
 \description{
-Compute loss per data matrix using multivariate regression
+Internal function for CICA package
 }
 \keyword{internal}

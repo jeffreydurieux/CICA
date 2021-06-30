@@ -11,10 +11,12 @@
 #' @param nClus number of clusters
 #' @param scale scale each matrix to have an equal sum of squares
 #' @param center mean center matrices
-#' @param rational optional numeric vector, a (pseudo) rational starting cluster
+#' @param rational a rational starting seed, if NULL no rational starting seed is used
 #' @param maxiter maximum number of iterations for each start
 #' @param verbose print loss information to console
-#' @return \item{P}{partitioning vector of size \code{length(DataList)}}
+#'
+#' @return \code{CICA} returns an object of \code{\link{class}} "CICA". It contains the estimated clustering, cluster specific component matrices and subject specific time course matrices
+#' \item{P}{partitioning vector of size \code{length(DataList)}}
 #' \item{Sr}{list of size \code{nClus}, containing cluster specific independent components}
 #' \item{Ais}{list of size \code{length(DataList)}, containing subject specific time courses}
 #' \item{Loss}{loss function value of the best start}
@@ -24,12 +26,13 @@
 #'
 #'@author Jeffrey Durieux
 #'
-CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
-                 center = TRUE, rational = NULL, maxiter = 100, verbose = TRUE){
-
-  # load('~/Repositories/Rpackages/CICA_2020/data/ExampleData.Rdata')
-  # DataList <- ExampleData$XE
-  # nStarts = 3; nComp = 5; nClus = 3;center = TRUE; scale = TRUE;maxiter = 100;verbose = TRUE
+#'
+#' @examples
+#' data('ExampleData', package = 'CICA')
+#' output <- CICA(DataList = ExampleData, nStarts = 3, nComp = 5, nClus = 3, verbose = FALSE)
+#' summary(output)
+CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
+                 rational = NULL, maxiter = 100, verbose = TRUE){
 
   #### input arguments check ####
 
@@ -37,7 +40,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
     stop('Provided DataList is not a list object')
   }
 
-  # check if datalist are matrices and not nifti's for example
+
   if( all(sapply(DataList, class)[1,] == 'matrix') == FALSE){
     stop('Please check input DataList, elements are not matrices')
   }
@@ -74,8 +77,6 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
   LossStarts <- numeric()
   TempOutput <- list()
 
-  #### Rational starts ####
-
   #### Random starts ####
 
   for(st in 1:nStarts){
@@ -85,20 +86,20 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
     iter <- 1
 
     #### step 1 initialize P ####
-    newclus <- clusf(nBlocks = nBlocks, nClus = nClus)
+    if(!is.null(rational)){
+      newclus = rational
+    }else{
+      newclus <- clusf(nBlocks, nClus)
+    }
+
 
     repeat{
       # and concatenate datablocks according to clustering
       SortedDataList <- ConcData(DataList = DataList, ClusVec = newclus)
 
-      #### Step 2 extract group ICA parameters (only Sr is necessary) ####
+      #### Step 2 extract group ICA parameters (only Sr is necessary ####
 
       ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp)
-
-      # extra check only for development
-      if(length(ICAparams$Sr) != nClus ){
-         cat('empty cluster, step 2\n')
-       }
 
       #### Step 3 update P ####
       UpdatedPInfo <- Reclus(DataList = DataList, SrList = ICAparams$Sr)
@@ -108,7 +109,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
                                      newcluster = UpdatedPInfo$newclus,
                                      SSminVec = UpdatedPInfo$SSminVec)
 
-      if(length(unique(newclus)) != nClus ){
+      if(length(unique(newclus)) != nClus & verbose == TRUE){
         cat('empty cluster, checkempties\n')
       }
 
@@ -177,19 +178,6 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE,
   output$Loss <- TempOutput$`1`$Loss
   output$LossStarts <- LossStarts
 
-  # if(!is.null(rational)){
-  #   Rat <- list()
-  #   RatP <- TempOutputRat$`1`$P
-  #   RatSr <- TempOutputRat$`1`$Sr
-  #   RatAis <- lapply( seq_along(DataList), function(anom){
-  #     crossprod(DataList[[anom]], RatSr[[ RatP[anom] ]]) %*% NMFN::mpinv( t(RatSr[[ RatP[anom] ]]) %*% RatSr[[ RatP[anom] ]])
-  #   })
-  #   Rat$P <- RatP
-  #   Rat$Sr <- RatSr
-  #   Rat$Ais <- RatAis
-  #   Rat$Loss <- TempOutputRat$`1`$Loss
-  #   output$rationalstart <- Rat
-  # }
 
   class(output) <- 'CICA'
   return(output)

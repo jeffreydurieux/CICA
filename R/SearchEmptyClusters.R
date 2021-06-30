@@ -1,11 +1,11 @@
 #' Search for empty clusters
-#'
+#'@description Internal function for CICA package
 #' @param oldcluster previous clustering vector P
 #' @param newcluster newly updated clustering vector P
 #' @param SSminvec loss function values per data block
 #'
 #' @keywords internal
-#'
+#' @return a numeric vector indicating the new partitioning vector without empty clusters
 SearchEmptyClusters <- function(nClus, newcluster, SSminVec) {
 
   OriCluster <- 1:nClus
@@ -48,9 +48,8 @@ SearchEmptyClusters <- function(nClus, newcluster, SSminVec) {
 
   }# else some emptyclusters
 
-  # Development check
   if( length(unique(newcluster)) != nClus ){
-    cat('In function SearchEmptyCluster, empty/ies occurred')
+    stop('In function SearchEmptyCluster, empty/ies occurred')
   }
   return(newcluster)
 }

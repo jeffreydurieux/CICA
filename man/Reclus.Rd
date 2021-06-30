@@ -2,7 +2,7 @@
 % Please edit documentation in R/Reclus.R
 \name{Reclus}
 \alias{Reclus}
-\title{Title}
+\title{Recluster based on cluster specific components}
 \usage{
 Reclus(DataList, SrList)
 }
@@ -11,7 +11,12 @@ Reclus(DataList, SrList)
 
 \item{SrList}{list with Group ICA RSN parameters}
 }
+\value{
+\item{newclus}{a list object with an updated partitioning}
+\item{SSminVec}{a numeric vector with the lowest loss function values per data block}
+\item{Loss}{a numeric indicating the new loss function value}
+}
 \description{
-Title
+Internal function for CICA package
 }
 \keyword{internal}

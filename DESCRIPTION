@@ -9,7 +9,7 @@ Depends:
     R (>= 2.10)
 Author: Jeffrey Durieux [aut, cre], Tom Wilderjans [aut]
 Maintainer: Jeffrey Durieux <durieux.jeffrey@gmail.com>
-Description: Clustering multi-subject resting state fMRI data. This methods enables the clustering of subjects based on multi-subject resting state functional MRI data. Objects are clustered based on similarities and differences in cluster-specific ICA estimated components.
+Description: Clustering multi-subject resting state functional Magnatic Resonance Imaging data. This methods enables the clustering of subjects based on multi-subject resting state functional Magnatic Resonance Imaging data. Objects are clustered based on similarities and differences in cluster-specific estimated components obtained by Independent Component Analysis.
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true

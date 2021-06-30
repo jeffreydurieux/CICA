@@ -11,7 +11,10 @@ xscale(Xi, value = 1000)
 
 \item{value}{desired sum of squares value of the datablock}
 }
+\value{
+a matrix that is scale to have a sum of squares of size \code{value}
+}
 \description{
-Scale data blocks to have an equal sum of squares
+Internal function for CICA package
 }
 \keyword{internal}

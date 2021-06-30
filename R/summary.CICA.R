@@ -1,9 +1,13 @@
 #' Summary method for class CICA
-#' @rdname CICA
+#' @description Summarize a CICA analysis
 #' @param object Object of the type produced by \code{\link{CICA}}
 #' @param ... Additional arguments
 #'
-#' @return
+#' @return \code{summary.CICA} returns an overview of the estimated clustering of a \code{\link{CICA}} analysis
+#' \item{PM}{Partitioning matrix}
+#' \item{tab}{tabulation of the clustering}
+#' \item{Loss}{Loss function value of the solution}
+
 #' @export
 #'
 #' @examples
@@ -36,4 +40,10 @@ summary.CICA <- function(object, ...){
 
   cat('Loss function value of optimal solution is: ', object$Loss,'\n')
 
+  out <- list()
+  out$PM <- PB
+  out$tab <- tab
+  out$loss <- object$Loss
+
+  return(out)
 }

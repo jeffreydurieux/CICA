@@ -11,7 +11,10 @@ ExtractICA(DataList, nComp)
 
 \item{nComp}{number of ICA components to extract}
 }
+\value{
+a list with cluster specific independent components
+}
 \description{
-Extract Group ICA parameters
+Internal function for CICA package
 }
 \keyword{internal}

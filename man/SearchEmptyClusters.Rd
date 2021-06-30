@@ -13,7 +13,10 @@ SearchEmptyClusters(nClus, newcluster, SSminVec)
 
 \item{SSminvec}{loss function values per data block}
 }
+\value{
+a numeric vector indicating the new partitioning vector without empty clusters
+}
 \description{
-Search for empty clusters
+Internal function for CICA package
 }
 \keyword{internal}

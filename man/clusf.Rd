@@ -7,11 +7,14 @@
 clusf(nBlocks, nClus)
 }
 \arguments{
-\item{nBlocks}{number of objects}
+\item{nBlocks}{integer: number of objects}
 
-\item{nClus}{number of clusters}
+\item{nClus}{integer: number of clusters}
+}
+\value{
+a numeric vector indicating the clustering
 }
 \description{
-Random clustering generation
+Internal function for CICA package
 }
 \keyword{internal}
