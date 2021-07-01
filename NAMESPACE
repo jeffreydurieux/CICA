@@ -2,5 +2,7 @@
 
 S3method(summary,CICA)
 export(CICA)
+export(computeRVmat)
+export(modRV)
 import(NMFN)
 import(ica)
