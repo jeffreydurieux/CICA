@@ -32,3 +32,4 @@ Smilde AK, Kiers HAL, Bijlsma S, Rubingh CM, van Erk MJ (2009) Matrix correlatio
 \author{
 Jeffrey Durieux
 }
+\keyword{internal}

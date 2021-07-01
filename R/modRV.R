@@ -4,7 +4,7 @@
 #' @param Y second matrix, number of rows in Y should corresponds to number of rows in X
 #'
 #' @return A single value, indicating the similarity between the two input matrices
-#' @export
+#' @keywords internal
 #'
 #'@author Jeffrey Durieux
 #'@references Smilde AK, Kiers HAL, Bijlsma S, Rubingh CM, van Erk MJ (2009) Matrix correlations for high-dimensional data: the modified RV-coefficient. Bioinformatics 25(3):401–405

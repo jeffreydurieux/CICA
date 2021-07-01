@@ -7,8 +7,25 @@
 #' @param dist boolean if TRUE distance object is returned
 #' @param verbose boolean if TRUE progressbar is printed to the console
 #'
-#' @return \item{RVsS} a matrix or distance object containing the pairwise modified RV values
+#' @return \item{RVsS}{a square similarity matrix of \code{class} \code{\link{matrix}} or distance object of \code{class} \code{\link{dist}} containing the pairwise modified RV values}
 #' @export
+#' @examples data('ExampleData', package = 'CICA')
+#'
+#' #Compute single subject ICAs (nClus equals length(ExampleData))
+#' output <- CICA(DataList = ExampleData, nStarts = 1,
+#'                nComp = 5, nClus = 9, verbose = FALSE)
+#'
+#' RV <- computeRVmat(DataList = output$Sr, dist = TRUE,
+#'                     verbose = FALSE)
+#'
+#' # apply hierarchical clustering on RV output
+#' hcl <- hclust(RV)
+#' plot(hcl)
+#'
+#' # low dimensional visualisation using Classical Multidimensional Scaling
+#' mds <- cmdscale(RV)
+#' plot(mds)
+#'
 #'
 computeRVmat <- function(DataList = DataList, dist = TRUE, verbose = TRUE){
 
