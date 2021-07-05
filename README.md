@@ -4,12 +4,18 @@
 
 ## Version notes
 
-Version of CICA on CRAN notes
+#### Version of CICA on CRAN notes:
 
 -   CRAN v0.1.0: CICA version with ALS random start procedure
 
-Version of CICA on GitHub:
+#### Version of CICA on GitHub: 
+
+Download the development version of CICA using the devtools package: `devtools::install_github('jeffreydurieux/CICA')`
+
+This version contains:
 
 -   R v0.1.0: CICA version with ALS random start procedure
 
--   R v0.1.0: modified RV matrix computations. This is the two step clustering procedure
+-   R v0.1.0: modified RV matrix computations (computeRVmat()). A (dis) similarity matrix is computed between a list of input matrices. This is based on the two-step clustering procedure [Durieux & Wilderjans (2019).](https://link.springer.com/article/10.1007/s41237-019-00086-4)
+
+-   R v0.1.0: FindRationalStarts() function. This function applies the two-step procedure using several hierarchical clustering methods in order to find rational starts for the ALS algorithm for CICA. Cluster perturbation options are also included.
