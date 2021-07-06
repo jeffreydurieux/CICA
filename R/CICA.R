@@ -77,7 +77,6 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
   LossStarts <- numeric()
   TempOutput <- list()
 
-  #### Random starts ####
 
   for(st in 1:nStarts){
     if(verbose == TRUE){
@@ -87,8 +86,37 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
 
     #### step 1 initialize P ####
     if(!is.null(rational)){
-      newclus = rational
+
+      if(class(rational) == 'rstarts'){
+
+        if(st <= dim(rational$rationalstarts)[2]){
+          if(verbose){
+            cat('Type of start: Rational \n')
+          }
+          newclus <- rational$rationalstarts[,st]
+        }else{
+          if(verbose){
+            cat('Type of start: Random \n')
+          }
+          newclus <- clusf(nBlocks, nClus)
+        }
+      }else{
+        if(st == 1){
+          if(verbose){
+            cat('Type of start: Rational \n')
+          }
+          newclus <- rational
+        }else{
+          if(verbose){
+            cat('Type of start: Random \n')
+          }
+          newclus <- clusf(nBlocks, nClus)
+        }
+      }
     }else{
+      if(verbose){
+        cat('Type of start: Random \n')
+      }
       newclus <- clusf(nBlocks, nClus)
     }
 
