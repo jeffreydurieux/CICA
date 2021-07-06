@@ -4,6 +4,8 @@
 #'
 #' @import ica
 #' @import NMFN
+#' @importFrom stats as.dist cutree hclust
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #
 #' @param DataList a list of matrices
 #' @param nStarts number of multiple starts

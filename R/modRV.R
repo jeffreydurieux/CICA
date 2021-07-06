@@ -12,10 +12,10 @@
 #' @seealso \code{\link{computeRVmat}}
 #'
 #' @examples
-#' X1 <- matrix(rnorm(1000), 10)
-#' SVD <- svd(X1)
-#' X2 <- SVD$u[,-5] %*% diag(SVD$d[-5]) %*% t(SVD$v[,-5])
-#' modRV(X1,X2)
+#' #X1 <- matrix(rnorm(1000), 10)
+#' #SVD <- svd(X1)
+#' #X2 <- SVD$u[,-5] %*% diag(SVD$d[-5]) %*% t(SVD$v[,-5])
+#' #modRV(X1,X2)
 
 
 
