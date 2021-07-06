@@ -6,7 +6,11 @@
 #'
 #' @keywords internal
 #' @return a numeric vector indicating the new partitioning vector without empty clusters
-SearchEmptyClusters <- function(nClus, newcluster, SSminVec) {
+SearchEmptyClusters <- function(nClus, newcluster, SSminVec = NULL) {
+
+  if(is.null(SSminVec)){
+    SSminVec <- rep(100, length(newcluster))
+  }
 
   OriCluster <- 1:nClus
 

@@ -123,6 +123,14 @@ FindRationalStarts <- function(DataList, nComp, nClus, scale = TRUE,
                          p_median, p_centroid)
   }
 
+  # check if no empty clusters are present
+  temp <- output
+  for(i in 1:ncol(output)){
+    temp[,i] <- SearchEmptyClusters(nClus, newcluster = output[, i])
+  }
+
+  output <- temp
+
 
   out <- list()
   out$rationalstarts <- output
