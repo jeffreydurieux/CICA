@@ -4,7 +4,7 @@
 \alias{SearchEmptyClusters}
 \title{Search for empty clusters}
 \usage{
-SearchEmptyClusters(nClus, newcluster, SSminVec)
+SearchEmptyClusters(nClus, newcluster, SSminVec = NULL)
 }
 \arguments{
 \item{newcluster}{newly updated clustering vector P}
