@@ -30,8 +30,8 @@
 #'
 #'
 #' @examples
-#' data('ExampleData', package = 'CICA')
-#' output <- CICA(DataList = ExampleData, nStarts = 3, nComp = 5, nClus = 3, verbose = FALSE)
+#' data('CICA_data', package = 'CICA')
+#' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
 CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
                  rational = NULL, maxiter = 100, verbose = TRUE){
@@ -92,31 +92,31 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
       if(class(rational) == 'rstarts'){
 
         if(st <= dim(rational$rationalstarts)[2]){
-          if(verbose){
+          if(verbose == TRUE){
             cat('Type of start: Rational \n')
           }
           newclus <- rational$rationalstarts[,st]
         }else{
-          if(verbose){
+          if(verbose == TRUE){
             cat('Type of start: Random \n')
           }
           newclus <- clusf(nBlocks, nClus)
         }
       }else{
         if(st == 1){
-          if(verbose){
+          if(verbose == TRUE){
             cat('Type of start: Rational \n')
           }
           newclus <- rational
         }else{
-          if(verbose){
+          if(verbose == TRUE){
             cat('Type of start: Random \n')
           }
           newclus <- clusf(nBlocks, nClus)
         }
       }
     }else{
-      if(verbose){
+      if(verbose == TRUE){
         cat('Type of start: Random \n')
       }
       newclus <- clusf(nBlocks, nClus)

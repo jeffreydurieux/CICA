@@ -20,10 +20,10 @@ computeRVmat(DataList = DataList, dist = TRUE, verbose = TRUE)
 This function computes a NxN modified RV matrix
 }
 \examples{
-data('ExampleData', package = 'CICA')
+data('CICA_data', package = 'CICA')
 
 #Compute single subject ICAs (nClus equals length(ExampleData))
-output <- CICA(DataList = ExampleData, nStarts = 1,
+output <- CICA(DataList = CICA_data$X, nStarts = 1,
                nComp = 5, nClus = 9, verbose = FALSE)
 
 RV <- computeRVmat(DataList = output$Sr, dist = TRUE,

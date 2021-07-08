@@ -9,10 +9,10 @@
 #'
 #' @return \item{RVsS}{a square similarity matrix of \code{class} \code{\link{matrix}} or distance object of \code{class} \code{\link{dist}} containing the pairwise modified RV values}
 #' @export
-#' @examples data('ExampleData', package = 'CICA')
+#' @examples data('CICA_data', package = 'CICA')
 #'
 #' #Compute single subject ICAs (nClus equals length(ExampleData))
-#' output <- CICA(DataList = ExampleData, nStarts = 1,
+#' output <- CICA(DataList = CICA_data$X, nStarts = 1,
 #'                nComp = 5, nClus = 9, verbose = FALSE)
 #'
 #' RV <- computeRVmat(DataList = output$Sr, dist = TRUE,
