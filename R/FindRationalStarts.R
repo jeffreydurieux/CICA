@@ -1,4 +1,3 @@
-#' Compute rational starts for CICA
 #'
 #' @param DataList a list of matrices
 #' @param nComp number of ICA components to extract
@@ -8,9 +7,15 @@
 #' @param pseudo default is \code{NULL}
 #' @param verbose print output to console
 #'
-#' @return dataframe with rational and pseudo-rational starts
+#' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
 #' @export
 #'
+#' @examples
+#' data('CICA_data', package = 'CICA')
+#' rats <- FindRationalStarts(DataList = CICA_data$X, nComp = 5, nClus = 4,verbose = T, pseudo = .2)
+#' plot(rat, type = 1, method = 'ward.D2')
+#' plot(rat, type = 2, method = 'ward.D2')
+#' plot(rat, type = 2, method = 'ward.D2', mdsdim = 3)
 #' @references Durieux, J., & Wilderjans, T. F. (2019). Partitioning subjects based on high-dimensional fMRI data: comparison of several clustering methods and studying the influence of ICA data reduction in big data. Behaviormetrika, 46(2), 271-311.
 
 #'

@@ -4,6 +4,7 @@
 #'
 #' @import ica
 #' @import NMFN
+#' @import plotly
 #' @importFrom stats as.dist cutree hclust
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #
