@@ -11,11 +11,13 @@
 #' @export
 #'
 #' @examples
+#' ## Not run:
 #' data('CICA_data', package = 'CICA')
-#' rats <- FindRationalStarts(DataList = CICA_data$X, nComp = 5, nClus = 4,verbose = T, pseudo = .2)
-#' plot(rat, type = 1, method = 'ward.D2')
-#' plot(rat, type = 2, method = 'ward.D2')
-#' plot(rat, type = 2, method = 'ward.D2', mdsdim = 3)
+#' rats <- FindRationalStarts(DataList = CICA_data$X, nComp = 5, nClus = 4,verbose = TRUE, pseudo = .2)
+#' plot(rats, type = 1, method = 'ward.D2')
+#' plot(rats, type = 2, method = 'ward.D2')
+#' plot(rats, type = 2, method = 'ward.D2', mdsdim = 3)
+#' ## End(Not run)
 #' @references Durieux, J., & Wilderjans, T. F. (2019). Partitioning subjects based on high-dimensional fMRI data: comparison of several clustering methods and studying the influence of ICA data reduction in big data. Behaviormetrika, 46(2), 271-311.
 
 #'

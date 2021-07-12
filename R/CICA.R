@@ -5,7 +5,7 @@
 #' @import ica
 #' @import NMFN
 #' @import plotly
-#' @importFrom stats as.dist cutree hclust
+#' @importFrom stats as.dist cutree hclust rect.hclust cmdscale
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #
 #' @param DataList a list of matrices

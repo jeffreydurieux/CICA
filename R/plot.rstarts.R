@@ -2,6 +2,7 @@
 #' @rdname FindRationalStarts
 #' @param x an object of \code{class} rstarts
 #' @param type type of plot, 1 for a dendrogram, 2 for a multidimensional scaling configuration
+#' @param mdsdim 2 for two dimensional mds configuration, 3 for a three dimensional configuration
 #' @param ... optional arguments passed to \code{hclust} function
 #' @export
 #'
