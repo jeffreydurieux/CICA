@@ -3,9 +3,13 @@ Type: Package
 Title: Clusterwise Independent Component Analysis
 Version: 0.2.0
 Date: 2021-06-28
+Remotes: github::neuroconductor/MNITemplate
 Depends: 
     ica,
     NMFN,
+    plotly,
+    papayar,
+    RNifti,
     R (>= 2.10)
 Author: Jeffrey Durieux [aut, cre], Tom Wilderjans [aut]
 Maintainer: Jeffrey Durieux <durieux.jeffrey@gmail.com>

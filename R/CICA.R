@@ -5,6 +5,8 @@
 #' @import ica
 #' @import NMFN
 #' @import plotly
+#' @import papayar
+#' @import RNifti
 #' @importFrom stats as.dist cutree hclust rect.hclust cmdscale
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #
