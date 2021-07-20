@@ -3,7 +3,8 @@ Type: Package
 Title: Clusterwise Independent Component Analysis
 Version: 0.2.0
 Date: 2021-06-28
-Remotes: github::neuroconductor/MNITemplate
+Remotes: hadley/testthat, 
+url::https://github.com/Jfortin1/MNITemplate/archive/HEAD.zip
 Depends: 
     ica,
     NMFN,
@@ -19,3 +20,4 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 URL: https://hdl.handle.net/1887/35077, https://github.com/jeffreydurieux/CICA 
+
