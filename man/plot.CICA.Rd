@@ -4,12 +4,12 @@
 \alias{plot.CICA}
 \title{Plot method for}
 \usage{
-\method{plot}{CICA}(what, res)
+\method{plot}{CICA}(x, brain = "auto")
 }
 \arguments{
-\item{what}{...}
+\item{x}{Object of \code{class} CICA}
 
-\item{res}{...}
+\item{brain}{auto}
 }
 \description{
 Plot method for
