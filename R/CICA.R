@@ -7,7 +7,7 @@
 #' @import plotly
 #' @import papayar
 #' @import RNifti
-#' @importFrom stats as.dist cutree hclust rect.hclust cmdscale
+#' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #
 #' @param DataList a list of matrices

@@ -6,11 +6,8 @@
 #' @return list object containing Voxel by Time course matrices
 #' @export
 #'
-#' @examples
-#' ##Do not run
-#' data <- loadNiftis(dir = '/niftifolder/', toMatrix = TRUE)
-#' ##End(do not run)
-loadNiftis <- function(dir = ..., toMatrix = TRUE){
+
+loadNiftis <- function(dir, toMatrix = TRUE){
 
   fs <- dir(dir, pattern = '.nii.gz')
   files <- paste(dir, fs, sep = '/')

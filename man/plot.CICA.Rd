@@ -2,15 +2,18 @@
 % Please edit documentation in R/plot.CICA.R
 \name{plot.CICA}
 \alias{plot.CICA}
-\title{Plot method for}
+\title{Plot method for CICA}
 \usage{
-\method{plot}{CICA}(x, brain = "auto")
+\method{plot}{CICA}(x, brain = "auto", ...)
 }
 \arguments{
 \item{x}{Object of \code{class} CICA}
 
 \item{brain}{auto}
+
+\item{...}{other arguments}
 }
 \description{
-Plot method for
+Plot method for CICA. This function shows the cluster specific
+independent components in an interactive viewer using the papayar package
 }

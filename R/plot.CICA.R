@@ -1,10 +1,13 @@
-#' Plot method for
+#' Plot method for CICA
+#' @description Plot method for CICA. This function shows the cluster specific
+#' independent components in an interactive viewer using the papayar package
 #' @param x Object of \code{class} CICA
 #' @param brain auto
+#' @param ... other arguments
 #' @export
 #'
 #'
-plot.CICA <- function(x, brain = 'auto'){
+plot.CICA <- function(x, brain = 'auto', ...){
 
   dims <- dim(x$Sr[[1]])
 

@@ -4,7 +4,7 @@
 \alias{loadNiftis}
 \title{Load Nifti files from directory}
 \usage{
-loadNiftis(dir = ..., toMatrix = TRUE)
+loadNiftis(dir, toMatrix = TRUE)
 }
 \arguments{
 \item{dir}{Input directory containing nifti files}
@@ -16,9 +16,4 @@ list object containing Voxel by Time course matrices
 }
 \description{
 Load Nifti files from directory
-}
-\examples{
-##Do not run
-data <- loadNiftis(dir = '/niftifolder/', toMatrix = TRUE)
-##End(do not run)
 }
