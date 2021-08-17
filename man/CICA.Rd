@@ -10,6 +10,7 @@ CICA(
   nComp,
   nClus,
   scale = TRUE,
+  scalevalue = 1000,
   center = TRUE,
   rational = NULL,
   maxiter = 100,
@@ -26,6 +27,8 @@ CICA(
 \item{nClus}{number of clusters}
 
 \item{scale}{scale each matrix to have an equal sum of squares}
+
+\item{scalevalue}{desired sum of squares of the block scaling procedure}
 
 \item{center}{mean center matrices}
 

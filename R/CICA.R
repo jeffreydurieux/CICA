@@ -15,6 +15,7 @@
 #' @param nComp number of ICA components per cluster
 #' @param nClus number of clusters
 #' @param scale scale each matrix to have an equal sum of squares
+#' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
 #' @param rational a rational starting seed, if NULL no rational starting seed is used
 #' @param maxiter maximum number of iterations for each start
@@ -36,7 +37,7 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
+CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 1000, center = TRUE,
                  rational = NULL, maxiter = 100, verbose = TRUE){
 
   #### input arguments check ####
@@ -70,7 +71,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, center = TRUE,
 
   # scale datamatrices such that they have an equal sum of squares
   if(scale == TRUE){
-    DataList <- lapply(DataList, FUN = xscale)
+    DataList <- lapply(DataList, FUN = xscale, value = scalevalue)
   }
 
   nBlocks <- length(DataList)
