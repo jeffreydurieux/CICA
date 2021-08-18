@@ -4,12 +4,14 @@
 \alias{plot.CICA}
 \title{Plot method for CICA}
 \usage{
-\method{plot}{CICA}(x, brain = "auto", ...)
+\method{plot}{CICA}(x, brain = "auto", cluster = 1, ...)
 }
 \arguments{
 \item{x}{Object of \code{class} CICA}
 
 \item{brain}{auto}
+
+\item{cluster}{Components of cluster to plot. Only used when non fMRI related data is used}
 
 \item{...}{other arguments}
 }
