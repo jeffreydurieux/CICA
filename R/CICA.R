@@ -14,6 +14,7 @@
 #' @param nStarts number of multiple starts
 #' @param nComp number of ICA components per cluster
 #' @param nClus number of clusters
+#' @param EVD do computations with EVD only
 #' @param scale scale each matrix to have an equal sum of squares
 #' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
@@ -37,7 +38,7 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 1000, center = TRUE,
+CICA <- function(DataList, nStarts, nComp, nClus, EVD = FALSE,scale = TRUE, scalevalue = 1000, center = TRUE,
                  rational = NULL, maxiter = 100, verbose = TRUE){
 
   #### input arguments check ####
@@ -47,9 +48,9 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
   }
 
 
-  if( all(sapply(DataList, class)[1,] == 'matrix') == FALSE){
-    stop('Please check input DataList, elements are not matrices')
-  }
+  #if( all(sapply(DataList, class)[1,] == 'matrix') == FALSE){
+  #  stop('Please check input DataList, elements are not matrices')
+  #}
 
   # check if dimensions are equal
   if (all( rowSums(sapply(DataList,dim)) == dim(DataList[[1]]) * length(DataList) ) == FALSE ){
@@ -133,7 +134,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
 
       #### Step 2 extract group ICA parameters (only Sr is necessary ####
 
-      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp)
+      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp, EVD=EVD)
 
       #### Step 3 update P ####
       UpdatedPInfo <- Reclus(DataList = DataList, SrList = ICAparams$Sr)
@@ -162,6 +163,12 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
       #### step 4 convergence ####
       iter <- iter + 1
       if( Loss[iter-1] - Loss[iter]  < .000001 | iter == maxiter ){
+        if(EVD == TRUE){
+          SortedDataList <- ConcData(DataList = DataList, ClusVec = UpdatedPInfo$newclus)
+
+          ICAparams <- ExtractICA(SortedDataList,
+                                  nComp = nComp, EVD = FALSE )
+        }
         if(verbose == TRUE){
           if(iter == maxiter){
             cat('Maximum number of iterations reached \n')

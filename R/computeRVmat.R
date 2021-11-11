@@ -67,7 +67,9 @@ computeRVmat <- function(DataList = DataList, dist = TRUE, verbose = TRUE){
   diag(RVsS) <- 1
 
   if(dist == TRUE){
-    RVsS <- as.dist(1-RVsS)
+    RVsS <- as.dist(sqrt(1-RVsS))
   }
   return(RVsS)
 }
+
+test <- sma
