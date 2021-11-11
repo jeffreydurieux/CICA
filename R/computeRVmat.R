@@ -72,4 +72,3 @@ computeRVmat <- function(DataList = DataList, dist = TRUE, verbose = TRUE){
   return(RVsS)
 }
 
-test <- sma
