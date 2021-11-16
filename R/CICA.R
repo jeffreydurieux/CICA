@@ -14,7 +14,6 @@
 #' @param nStarts number of multiple starts
 #' @param nComp number of ICA components per cluster
 #' @param nClus number of clusters
-#' @param EVD do computations with EVD only
 #' @param scale scale each matrix to have an equal sum of squares
 #' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
@@ -38,7 +37,7 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-CICA <- function(DataList, nStarts, nComp, nClus, EVD = FALSE,scale = TRUE, scalevalue = 1000, center = TRUE,
+CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 1000, center = TRUE,
                  rational = NULL, maxiter = 100, verbose = TRUE){
 
   #### input arguments check ####
@@ -134,7 +133,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, EVD = FALSE,scale = TRUE, scal
 
       #### Step 2 extract group ICA parameters (only Sr is necessary ####
 
-      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp, EVD=EVD)
+      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp)
 
       #### Step 3 update P ####
       UpdatedPInfo <- Reclus(DataList = DataList, SrList = ICAparams$Sr)
@@ -163,12 +162,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, EVD = FALSE,scale = TRUE, scal
       #### step 4 convergence ####
       iter <- iter + 1
       if( Loss[iter-1] - Loss[iter]  < .000001 | iter == maxiter ){
-        if(EVD == TRUE){
-          SortedDataList <- ConcData(DataList = DataList, ClusVec = UpdatedPInfo$newclus)
 
-          ICAparams <- ExtractICA(SortedDataList,
-                                  nComp = nComp, EVD = FALSE )
-        }
         if(verbose == TRUE){
           if(iter == maxiter){
             cat('Maximum number of iterations reached \n')
