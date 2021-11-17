@@ -9,18 +9,14 @@
 #' @export
 #'
 matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
-
-  if(RV == TRUE){
-    RVs <- computeRVmat(x$Sr, dist = F, verbose = T)
-  }
-
+  lsr <- length(x$Sr)
 
   if(class(reference)[1] == 'numeric'){
     ncomp <- ncol(x$Sr[[1]])
     m <- 1:ncomp
     mm <- 1:ncomp
-    conList <- vector(mode = 'list', length = length(x$Sr)-1)
-    toSelect <- 1:length(x$Sr)
+    conList <- vector(mode = 'list', length =lsr-1)
+    toSelect <- 1:lsr
     toSelect <- toSelect[-reference]
 
     for(i in 1:length(toSelect)){
@@ -31,13 +27,13 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
       max <- apply(abs(con) , MARGIN = 1, max)
       m <- cbind(m, Cluster2)
       mm <- cbind(mm, max)
-
     }
+    names(conList) <- paste('Cluster ', toSelect)
 
     rownames(m) <- paste('Component ', 1:ncomp)
     rownames(mm) <- paste('Component ', 1:ncomp)
-    colnames(m) <- paste('Cluster ', 1:length(x$Sr))
-    colnames(mm) <- paste('Cluster ', 1:length(x$Sr))
+    colnames(m) <- paste('Cluster ', c(reference, toSelect))
+    colnames(mm) <- paste('Cluster ', c(reference,toSelect))
   }else if(class(reference)[1] == 'character'){
 
     nif <- readNifti(reference)
@@ -48,7 +44,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
     mm <- 1:ncomp
     conList <- vector(mode = 'list', length = length(x$Sr))
 
-    for(i in 1:length(x$Sr)){
+    for(i in 1:lsr){
       con <- cor(nif, x$Sr[[ i ]] )
       conList[[i]] <- con
       whichm <- apply(abs(con) , MARGIN = 1, which.max)
@@ -56,6 +52,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
       m <- cbind(m, whichm)
       mm <- cbind(mm, max)
     }
+    names(conList) <- paste('Cluster ', 1:lsr)
 
     rownames(m) <- paste('Component ', 1:ncomp)
     rownames(mm) <- paste('Component ', 1:ncomp)
@@ -71,7 +68,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
     mm <- 1:ncomp
     conList <- vector(mode = 'list', length = length(x$Sr))
 
-    for(i in 1:length(x$Sr)){
+    for(i in 1:lsr){
       con <- cor(reference, x$Sr[[ i ]] )
       conList[[i]] <- con
       whichm <- apply(abs(con) , MARGIN = 1, which.max)
@@ -79,6 +76,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
       m <- cbind(m, whichm)
       mm <- cbind(mm, max)
     }
+    names(conList) <- paste('Cluster ', 1:lsr)
 
     rownames(m) <- paste('Component ', 1:ncomp)
     rownames(mm) <- paste('Component ', 1:ncomp)
@@ -93,6 +91,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
   out <- list()
 
   if(RV == TRUE){
+    RVs <- computeRVmat(x$Sr, dist = F, verbose = T)
     out$RVs <- RVs
   }
 
