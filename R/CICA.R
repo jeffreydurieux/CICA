@@ -184,15 +184,18 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
       TempOutput$`1`$P <- newclus
       TempOutput$`1`$Sr <- ICAparams$Sr
       TempOutput$`1`$Loss <- utils::tail(LossStarts, n = 1)
+      TempOutput$`1`$iterations <- iter - 1
     }else if(st >= 2){
       TempOutput$`2`$P <- newclus
       TempOutput$`2`$Sr <- ICAparams$Sr
       TempOutput$`2`$Loss <- utils::tail(LossStarts, n = 1)
+      TempOutput$`2`$iterations <- iter - 1
 
       if(TempOutput$`2`$Loss <= TempOutput$`1`$Loss){
         TempOutput$`1`$P <- TempOutput$`2`$P
         TempOutput$`1`$Sr <- TempOutput$`2`$Sr
         TempOutput$`1`$Loss <- TempOutput$`2`$Loss
+        TempOutput$`1`$iterations <- iter - 1
       }
     }
 
@@ -212,6 +215,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
   output$Ais <- Ais
   output$Loss <- TempOutput$`1`$Loss
   output$LossStarts <- LossStarts
+  output$iterations <- TempOutput$`1`$iterations
 
 
   class(output) <- 'CICA'

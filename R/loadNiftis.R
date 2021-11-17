@@ -7,7 +7,7 @@
 #' @export
 #'
 
-loadNiftis <- function(dir, toMatrix = TRUE){
+loadNIfTIs <- function(dir, toMatrix = TRUE){
 
   fs <- dir(dir, pattern = '.nii.gz')
   files <- paste(dir, fs, sep = '/')
