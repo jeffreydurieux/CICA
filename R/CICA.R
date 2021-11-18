@@ -47,6 +47,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
   }
 
 
+
   #if( all(sapply(DataList, class)[1,] == 'matrix') == FALSE){
   #  stop('Please check input DataList, elements are not matrices')
   #}
