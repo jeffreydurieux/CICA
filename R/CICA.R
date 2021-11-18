@@ -7,6 +7,7 @@
 #' @import plotly
 #' @import papayar
 #' @import RNifti
+#' @import foreach
 #' @import parallel
 #' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor
 #' @importFrom utils setTxtProgressBar txtProgressBar
@@ -63,10 +64,6 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
     stop('Number of components to extract is larger than the number of variables in each data matrix')
   }
 
-  if(parallel == TRUE){
-    cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
-  }
-
 
   #### Preprocessing ####
 
@@ -90,7 +87,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
   LossStarts <- numeric()
   TempOutput <- list()
 
-
+ if(parallel == FALSE){
   for(st in 1:nStarts){
     if(verbose == TRUE){
       cat('Start number: ',st, '\n')
@@ -140,7 +137,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
 
       #### Step 2 extract group ICA parameters (only Sr is necessary ####
 
-      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp, parallel = parallel, cl = cores)
+      ICAparams <- CICA:::ExtractICA(DataList = SortedDataList, nComp = nComp)
 
       #### Step 3 update P ####
       UpdatedPInfo <- Reclus(DataList = DataList, SrList = ICAparams$Sr)
@@ -207,9 +204,129 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
     }
 
   }# end for nstarts
+}
+  #### parallel ####
+
+  if(parallel == TRUE){
+
+    cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
+    doParallel::registerDoParallel(cores)
+    parout <- foreach(st = 1:nStarts) %dopar%{
+      verbose = FALSE
+      if(verbose == TRUE){
+        cat('Start number: ',st, '\n')
+      }
+      iter <- 1
+
+      #### step 1 initialize P ####
+      if(!is.null(rational)){
+
+        if(class(rational) == 'rstarts'){
+
+          if(st <= dim(rational$rationalstarts)[2]){
+            if(verbose == TRUE){
+              cat('Type of start: Rational \n')
+            }
+            newclus <- rational$rationalstarts[,st]
+          }else{
+            if(verbose == TRUE){
+              cat('Type of start: Random \n')
+            }
+            newclus <- CICA:::clusf(nBlocks, nClus)
+          }
+        }else{
+          if(st == 1){
+            if(verbose == TRUE){
+              cat('Type of start: Rational \n')
+            }
+            newclus <- rational
+          }else{
+            if(verbose == TRUE){
+              cat('Type of start: Random \n')
+            }
+            newclus <- clusf(nBlocks, nClus)
+          }
+        }
+      }else{
+        if(verbose == TRUE){
+          cat('Type of start: Random \n')
+        }
+        newclus <- CICA:::clusf(nBlocks, nClus)
+      }
+
+
+      repeat{
+        # and concatenate datablocks according to clustering
+        SortedDataList <- CICA:::ConcData(DataList = DataList, ClusVec = newclus)
+
+        #### Step 2 extract group ICA parameters (only Sr is necessary ####
+
+        ICAparams <- CICA:::ExtractICA(DataList = SortedDataList, nComp = nComp)
+
+        #### Step 3 update P ####
+        UpdatedPInfo <- CICA:::Reclus(DataList = DataList, SrList = ICAparams$Sr)
+
+        # check empty clusters
+        newclus <- CICA:::SearchEmptyClusters(nClus = nClus,
+                                              newcluster = UpdatedPInfo$newclus,
+                                              SSminVec = UpdatedPInfo$SSminVec)
+
+        if(length(unique(newclus)) != nClus & verbose == TRUE){
+          cat('empty cluster, checkempties\n')
+        }
+
+        # add new loss to lossvector
+        if(iter == 1){
+          Loss <- c(Losstotal, UpdatedPInfo$Loss)
+        }else{
+          Loss <- c(Loss, UpdatedPInfo$Loss)
+        }
+
+        if(verbose == TRUE){
+          cat(Loss,'\n')
+        }
+
+
+        #### step 4 convergence ####
+        iter <- iter + 1
+        if( Loss[iter-1] - Loss[iter]  < .000001 | iter == maxiter ){
+
+          if(verbose == TRUE){
+            if(iter == maxiter){
+              cat('Maximum number of iterations reached \n')
+              cat('\n')
+            }else{
+              cat('Convergence \n')
+              cat('\n')
+            }
+          }
+          break()
+        }
+
+      }# end repeat
+
+      # LossStarts[st] <- Loss[iter]
+      TempOutput <- list()
+      TempOutput$P <- newclus
+      TempOutput$Sr <- ICAparams$Sr
+      TempOutput$Loss <- Loss
+      TempOutput$iterations <- iter - 1
+      return(TempOutput)
+    }# end for nstarts
+
+  lossespar <- sapply(seq_along(parout), function(anom) utils::tail(parout[[anom]]$Loss, n = 1))
+
+  id <- which.min(lossespar)
+  TempOutput <- list()
+  TempOutput$`1`$P <- parout[[id]]$P
+  TempOutput$`1`$Sr <- parout[[id]]$Sr
+  TempOutput$`1`$Loss <- tail(parout[[id]]$Loss, n=1)
+  TempOutput$`1`$iterations <- parout[[id]]$iterations
+  LossStarts <- lossespar
+  stopCluster(cores)
+  }
 
   #### output ####
-
   P <- TempOutput$`1`$P
   Sr <- TempOutput$`1`$Sr
   Ais <- lapply( seq_along(DataList), function(anom){
