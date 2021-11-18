@@ -20,6 +20,7 @@
 #' @param center mean center matrices
 #' @param rational a rational starting seed, if NULL no rational starting seed is used
 #' @param maxiter maximum number of iterations for each start
+#' @param parallel compute cluster-specific ICA parameters in parallel
 #' @param verbose print loss information to console
 #'
 #' @return \code{CICA} returns an object of \code{\link{class}} "CICA". It contains the estimated clustering, cluster specific component matrices and subject specific time course matrices

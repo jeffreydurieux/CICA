@@ -14,6 +14,7 @@ CICA(
   center = TRUE,
   rational = NULL,
   maxiter = 100,
+  parallel = FALSE,
   verbose = TRUE
 )
 }
@@ -35,6 +36,8 @@ CICA(
 \item{rational}{a rational starting seed, if NULL no rational starting seed is used}
 
 \item{maxiter}{maximum number of iterations for each start}
+
+\item{parallel}{compute cluster-specific ICA parameters in parallel}
 
 \item{verbose}{print loss information to console}
 }

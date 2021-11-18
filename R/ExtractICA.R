@@ -2,6 +2,8 @@
 #'@description Internal function for CICA package
 #' @param DataList a list object to perform Group ICAs on
 #' @param nComp number of ICA components to extract
+#' @param parallel compute ICA components in parallel
+#' @param cl an object created by parallel::makeCluster
 #'
 #'
 #' @keywords internal

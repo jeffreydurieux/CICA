@@ -4,12 +4,16 @@
 \alias{ExtractICA}
 \title{Extract Group ICA parameters}
 \usage{
-ExtractICA(DataList, nComp)
+ExtractICA(DataList, nComp, parallel, cl)
 }
 \arguments{
 \item{DataList}{a list object to perform Group ICAs on}
 
 \item{nComp}{number of ICA components to extract}
+
+\item{parallel}{compute ICA components in parallel}
+
+\item{cl}{an object created by parallel::makeCluster}
 }
 \value{
 a list with cluster specific independent components
