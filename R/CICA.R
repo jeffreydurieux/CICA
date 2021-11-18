@@ -7,6 +7,7 @@
 #' @import plotly
 #' @import papayar
 #' @import RNifti
+#' @import parallel
 #' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #
@@ -38,7 +39,7 @@
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
 CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 1000, center = TRUE,
-                 rational = NULL, maxiter = 100, verbose = TRUE){
+                 rational = NULL, maxiter = 100, parallel = FALSE, verbose = TRUE){
 
   #### input arguments check ####
 
@@ -59,6 +60,10 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
 
   if( nComp > ncol(DataList[[1]]) ){
     stop('Number of components to extract is larger than the number of variables in each data matrix')
+  }
+
+  if(parallel == TRUE){
+    cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
   }
 
 
@@ -134,7 +139,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
 
       #### Step 2 extract group ICA parameters (only Sr is necessary ####
 
-      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp)
+      ICAparams <- ExtractICA(DataList = SortedDataList, nComp = nComp, parallel = parallel, cl = cores)
 
       #### Step 3 update P ####
       UpdatedPInfo <- Reclus(DataList = DataList, SrList = ICAparams$Sr)
