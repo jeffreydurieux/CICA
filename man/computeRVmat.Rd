@@ -4,7 +4,13 @@
 \alias{computeRVmat}
 \title{Compute modified RV matrix}
 \usage{
-computeRVmat(DataList = DataList, dist = TRUE, verbose = TRUE)
+computeRVmat(
+  DataList = DataList,
+  dist = TRUE,
+  verbose = TRUE,
+  parallel = FALSE,
+  cl = NULL
+)
 }
 \arguments{
 \item{DataList}{a list with matrices}
@@ -12,6 +18,10 @@ computeRVmat(DataList = DataList, dist = TRUE, verbose = TRUE)
 \item{dist}{boolean if TRUE distance object is returned}
 
 \item{verbose}{boolean if TRUE progressbar is printed to the console}
+
+\item{parallel}{boolean if TRUE computations are done in parallel}
+
+\item{cl}{cl object present}
 }
 \value{
 \item{RVsS}{a square similarity matrix of \code{class} \code{\link{matrix}} or distance object of \code{class} \code{\link{dist}} containing the pairwise modified RV values}

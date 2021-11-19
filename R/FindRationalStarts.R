@@ -6,6 +6,7 @@
 #' @param center mean center matrices
 #' @param pseudo default is \code{NULL}
 #' @param verbose print output to console
+#' @parallel if true ICA's are run in parallel
 #'
 #' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
 #' @export
@@ -22,14 +23,26 @@
 
 #'
 FindRationalStarts <- function(DataList, nComp, nClus, scale = TRUE,
-                               center = TRUE, verbose = TRUE, pseudo = NULL){
+                               center = TRUE, verbose = TRUE, pseudo = NULL, parallel = FALSE){
 
 
-  ICAs <- CICA(DataList = DataList, nStarts = 1, nComp = nComp,
-               nClus = length(DataList), scale = scale, center = center, verbose = F)
+  if(parallel == FALSE){
+    ICAs <- CICA(DataList = DataList, nStarts = 1, nComp = nComp,
+                 nClus = length(DataList), scale = scale, center = center, verbose = F)
+    ICAs <- ICAs$Sr
+    d <- computeRVmat(DataList = ICAs, dist = TRUE, verbose = verbose)
+  }else{
+    cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
+    custica <- function(data, ncomp){
+      ica <- ica::icafast(X = data, nc = ncomp)
+      return(ica$S)
+    }
+    ICAs <- parLapply(cl = cores, X = DataList, fun = custica, ncomp = nComp)
+    d <- computeRVmat(DataList = ICAs, dist = TRUE, verbose = verbose, parallel = TRUE, cl = cores)
+    stopCluster(cores)
+  }
 
 
-  d <- computeRVmat(DataList = ICAs$Sr, dist = TRUE, verbose = verbose)
 
   if(verbose == TRUE){
     cat("Hierarchical cluster analysis using Ward's method \n")

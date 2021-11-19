@@ -12,7 +12,8 @@ FindRationalStarts(
   scale = TRUE,
   center = TRUE,
   verbose = TRUE,
-  pseudo = NULL
+  pseudo = NULL,
+  parallel = FALSE
 )
 
 \method{plot}{rstarts}(x, type = 1, mdsdim = 2, ...)

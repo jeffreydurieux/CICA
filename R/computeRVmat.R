@@ -6,6 +6,8 @@
 #' @param DataList a list with matrices
 #' @param dist boolean if TRUE distance object is returned
 #' @param verbose boolean if TRUE progressbar is printed to the console
+#' @param parallel boolean if TRUE computations are done in parallel
+#' @param cl cl object present
 #'
 #' @return \item{RVsS}{a square similarity matrix of \code{class} \code{\link{matrix}} or distance object of \code{class} \code{\link{dist}} containing the pairwise modified RV values}
 #' @export
@@ -27,41 +29,60 @@
 #' plot(mds)
 #'
 #'
-computeRVmat <- function(DataList = DataList, dist = TRUE, verbose = TRUE){
+computeRVmat <- function(DataList = DataList, dist = TRUE, verbose = TRUE, parallel = FALSE, cl=NULL){
 
+  #if(verbose == TRUE & parallel == TRUE){
+  #  stop('Parallel computations cannot be performed when verbose == TRUE\n P)
+  #}
   N <- length(DataList)
-
   comb <- t(utils::combn(1:N, 2))
+  RVsS <- matrix(data = NA, nrow = N , ncol = N)
+  RVS <- numeric()
 
-  if(verbose == TRUE){
-    cat("Computing pairwise modified-RV statistics: \n")
-    pb <- txtProgressBar(min = 0, max = nrow(comb), initial = 0)
+  if(parallel == TRUE){
 
-    RVsS <- matrix(data = NA, nrow = N , ncol = N)
-    RVS <- numeric()
-
-    for(i in 1:nrow(comb)){
-      RVS[i] <- modRV( DataList[[ comb[i,1] ]] , DataList[[ comb[i,2] ]])
-
-      res <- c(comb[i , ] , RVS[i] )
-
-      RVsS[res[1]  , res[2] ] <- res[3]
-      setTxtProgressBar(pb, i)
-
+    if(is.null(cl)){
+      cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
+      doParallel::registerDoParallel(cores)
+    }else{
+      doParallel::registerDoParallel(cl)
     }
-    cat('\n')
+    parobj <- foreach(i = 1:nrow(comb), .combine = 'rbind') %dopar% {
+      RVS <- modRV( DataList[[ comb[i,1] ]] , DataList[[ comb[i,2] ]])
+      res <- c(comb[i , ] , RVS )
+    }
+    if(is.null(cl)){
+      stopCluster(cores)
+    }
+    for(i in 1:nrow(parobj)){
+      RVsS[parobj[i,1]  , parobj[i,2] ] <- parobj[i,3]
+    }
   }else{
-    RVsS <- matrix(data = NA, nrow = N , ncol = N)
-    RVS <- numeric()
+    if(verbose == TRUE){
+      cat("Computing pairwise modified-RV statistics: \n")
+      pb <- txtProgressBar(min = 0, max = nrow(comb), initial = 0)
+      for(i in 1:nrow(comb)){
+        RVS[i] <- modRV( DataList[[ comb[i,1] ]] , DataList[[ comb[i,2] ]])
 
-    for(i in 1:nrow(comb)){
-      RVS[i] <- modRV( DataList[[ comb[i,1] ]] , DataList[[ comb[i,2] ]])
+        res <- c(comb[i , ] , RVS[i] )
 
-      res <- c(comb[i , ] , RVS[i] )
+        RVsS[res[1]  , res[2] ] <- res[3]
+        setTxtProgressBar(pb, i)
+      }
+      cat('\n')
+    }else{
+      for(i in 1:nrow(comb)){
+        RVS[i] <- modRV( DataList[[ comb[i,1] ]] , DataList[[ comb[i,2] ]])
 
-      RVsS[res[1]  , res[2] ] <- res[3]
+        res <- c(comb[i , ] , RVS[i] )
+
+        RVsS[res[1]  , res[2] ] <- res[3]
+      }
     }
   }
+
+
+
 
   RVsS[lower.tri(RVsS)] = t(RVsS)[lower.tri(RVsS)]
   diag(RVsS) <- 1
