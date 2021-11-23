@@ -4,10 +4,14 @@
 \alias{Sr_to_nifti}
 \title{Convert Cluster specific independent components to NIFTI format}
 \usage{
-Sr_to_nifti(x)
+Sr_to_nifti(x, write = FALSE, ...)
 }
 \arguments{
 \item{x}{an object of \code{class} CICA}
+
+\item{write}{if TRUE, NIfTI files are written to current working directory}
+
+\item{...}{other arguments passed to RNifti::writeNifti}
 }
 \value{
 a list with niftiImage files

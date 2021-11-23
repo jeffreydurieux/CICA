@@ -1,11 +1,12 @@
 #' Convert Cluster specific independent components to NIFTI format
 #'
 #' @param x an object of \code{class} CICA
-#'
+#' @param write if TRUE, NIfTI files are written to current working directory
+#' @param ... other arguments passed to RNifti::writeNifti
 #' @return a list with niftiImage files
 #' @export
 #'
-Sr_to_nifti <- function(x){
+Sr_to_nifti <- function(x, write = FALSE, ...){
 
   dims <- dim(x$Sr[[1]])
 
@@ -34,6 +35,12 @@ Sr_to_nifti <- function(x){
   }
 
   names(NIFS) <- paste('Sr_', 1:length(x$Sr), sep='')
+
+  if(write == TRUE){
+    filenames <- names(NIFS)
+    lapply(X = seq_along(NIFS), function(i)
+      writeNifti(NIFS[[i]], file = filenames[i] ,datatype = ...) )
+  }
 
   return(NIFS)
 }
