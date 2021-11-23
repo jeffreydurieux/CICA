@@ -9,6 +9,7 @@
 #' @import RNifti
 #' @import foreach
 #' @import parallel
+#' @import doParallel
 #' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #

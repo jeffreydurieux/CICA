@@ -6,6 +6,7 @@
 #' @param center mean center matrices
 #' @param pseudo default is \code{NULL}
 #' @param verbose print output to console
+#' @param cl cl object
 #' @parallel if true ICA's are run in parallel
 #'
 #' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
@@ -23,7 +24,7 @@
 
 #'
 FindRationalStarts <- function(DataList, nComp, nClus, scale = TRUE,
-                               center = TRUE, verbose = TRUE, pseudo = NULL, parallel = FALSE){
+                               center = TRUE, verbose = TRUE, pseudo = NULL, parallel = FALSE, cl = NULL){
 
 
   if(parallel == FALSE){
@@ -32,14 +33,14 @@ FindRationalStarts <- function(DataList, nComp, nClus, scale = TRUE,
     ICAs <- ICAs$Sr
     d <- computeRVmat(DataList = ICAs, dist = TRUE, verbose = verbose)
   }else{
-    cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
+    #cores <- makeCluster( mc <- getOption('cl.cores', detectCores() - 1))
     custica <- function(data, ncomp){
       ica <- ica::icafast(X = data, nc = ncomp)
       return(ica$S)
     }
-    ICAs <- parLapply(cl = cores, X = DataList, fun = custica, ncomp = nComp)
-    d <- computeRVmat(DataList = ICAs, dist = TRUE, verbose = verbose, parallel = TRUE, cl = cores)
-    stopCluster(cores)
+    ICAs <- parLapply(cl = cl, X = DataList, fun = custica, ncomp = nComp)
+    d <- computeRVmat(DataList = ICAs, dist = TRUE, verbose = verbose, parallel = TRUE, cl = cl)
+    #stopCluster(cores)
   }
 
 

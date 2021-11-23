@@ -13,7 +13,8 @@ FindRationalStarts(
   center = TRUE,
   verbose = TRUE,
   pseudo = NULL,
-  parallel = FALSE
+  parallel = FALSE,
+  cl = NULL
 )
 
 \method{plot}{rstarts}(x, type = 1, mdsdim = 2, ...)
@@ -32,6 +33,8 @@ FindRationalStarts(
 \item{verbose}{print output to console}
 
 \item{pseudo}{default is \code{NULL}}
+
+\item{cl}{cl object}
 
 \item{x}{an object of \code{class} rstarts}
 
