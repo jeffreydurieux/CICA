@@ -16,7 +16,7 @@ Reclus <- function(DataList, SrList) {
   Loss <- sum(SSminVec)
 
   ResList <- list("newclus" = SSminIndexVec,'SSminVec' = SSminVec,
-                  "Loss" = Loss)
+                  "Loss" = Loss, "SSList" = SSList)
 
   return(ResList)
 }

@@ -143,6 +143,8 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
                                      newcluster = UpdatedPInfo$newclus,
                                      SSminVec = UpdatedPInfo$SSminVec)
 
+     # UpdatedPInfo$Loss <- sum(sapply(seq_along(UpdatedPInfo$SSList), function(i) UpdatedPInfo$SSList[[i]][newclus[i]]))
+
       if(length(unique(newclus)) != nClus & verbose == TRUE){
         cat('empty cluster, checkempties\n')
       }
