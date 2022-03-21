@@ -14,7 +14,8 @@ CICA(
   center = TRUE,
   rational = NULL,
   maxiter = 100,
-  verbose = TRUE
+  verbose = TRUE,
+  ctol = 1e-06
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ CICA(
 \item{maxiter}{maximum number of iterations for each start}
 
 \item{verbose}{print loss information to console}
+
+\item{ctol}{tolerance value for convergence criterion}
 }
 \value{
 \code{CICA} returns an object of \code{\link{class}} "CICA". It contains the estimated clustering, cluster specific component matrices and subject specific time course matrices

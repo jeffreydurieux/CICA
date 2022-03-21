@@ -20,6 +20,7 @@
 #' @param rational a rational starting seed, if NULL no rational starting seed is used
 #' @param maxiter maximum number of iterations for each start
 #' @param verbose print loss information to console
+#' @param ctol tolerance value for convergence criterion
 #'
 #' @return \code{CICA} returns an object of \code{\link{class}} "CICA". It contains the estimated clustering, cluster specific component matrices and subject specific time course matrices
 #' \item{P}{partitioning vector of size \code{length(DataList)}}
@@ -38,7 +39,7 @@
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
 CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 1000, center = TRUE,
-                 rational = NULL, maxiter = 100, verbose = TRUE){
+                 rational = NULL, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
 
@@ -163,7 +164,7 @@ CICA <- function(DataList, nStarts, nComp, nClus, scale = TRUE, scalevalue = 100
 
       #### step 4 convergence ####
       iter <- iter + 1
-      if( Loss[iter-1] - Loss[iter]  < .000001 | iter == maxiter ){
+      if( Loss[iter-1] - Loss[iter]  < ctol | iter == maxiter ){
 
         if(verbose == TRUE){
           if(iter == maxiter){
