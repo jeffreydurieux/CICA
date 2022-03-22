@@ -9,8 +9,8 @@ CICA(
   nStarts,
   nComp,
   nClus,
-  scale = TRUE,
-  scalevalue = 1000,
+  userGrid = NULL,
+  scalevalue = NULL,
   center = TRUE,
   rational = NULL,
   maxiter = 100,
@@ -23,11 +23,11 @@ CICA(
 
 \item{nStarts}{number of multiple starts}
 
-\item{nComp}{number of ICA components per cluster}
+\item{nComp}{number or vector of ICA components per cluster}
 
-\item{nClus}{number of clusters}
+\item{nClus}{number or vector of clusters}
 
-\item{scale}{scale each matrix to have an equal sum of squares}
+\item{userGrid}{user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters}
 
 \item{scalevalue}{desired sum of squares of the block scaling procedure}
 
