@@ -41,6 +41,12 @@
 CICA <- function(DataList, nStarts, nComp, nClus, userGrid = NULL, scalevalue = NULL, center = TRUE, rational = NULL, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
+  if(is.null(names(DataList))){
+    filenames <- 1:length(DataList)
+  }else{
+    filenames <- names(DataList)
+  }
+
   if(is.null(userGrid)){
     if(hasArg(nComp) == FALSE){
       stop('nComp or userGrid not provided')
@@ -246,6 +252,14 @@ CICA <- function(DataList, nStarts, nComp, nClus, userGrid = NULL, scalevalue = 
     Ais <- lapply( seq_along(DataList), function(anom){
       crossprod(DataList[[anom]], Sr[[ P[anom] ]]) %*% NMFN::mpinv( t(Sr[[ P[anom] ]]) %*% Sr[[ P[anom] ]])
     })
+
+    # if(is.null(names(DataList))){
+    #   names(P) <- 1:length(DataList)
+    # }else{
+    #   cat('test')
+    #   names(P) <- names(DataList)
+    # }
+    names(P) <- filenames
 
     output <- list()
     output$P <- P
