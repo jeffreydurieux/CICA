@@ -27,7 +27,7 @@ plot.rstarts <- function(x, type = 1, mdsdim = 2, ...){
     if(mdsdim == 2){
       plot_ly(data = df, x=~X1, y=~X2, color = ~lab, type = 'scatter', mode = 'markers',
               text = hover, hoverinfo = 'text') %>%
-        layout(title = title)
+        layout(title = title, yaxis = list(scaleanchor = 'x'))
     }else{
       plot_ly(data = df, x=~X1, y=~X2, z=~X3, color = ~lab, type = 'scatter3d', mode = 'markers',
               text = hover, hoverinfo = 'text', marker = list(size = 5)) %>%
