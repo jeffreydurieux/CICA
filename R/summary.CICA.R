@@ -16,7 +16,7 @@
 #' summary(output)
 summary.CICA <- function(object, ...){
 
-  names(object$P) <- 1:length(object$P)
+  #names(object$P) <- 1:length(object$P)
 
   cat('Partitioning matrix P: \n' )
   PB <- matrix(0, nrow = length(object$P), ncol = length(unique(object$P)))
@@ -24,7 +24,7 @@ summary.CICA <- function(object, ...){
     PB[i, object$P[i]] <- 1
   }
   colnames(PB) <- paste('Cluster',sort(unique(object$P)))
-
+  rownames(PB) <- names(object$P)
   cat('\n')
   print(PB)
 
@@ -40,10 +40,10 @@ summary.CICA <- function(object, ...){
 
   cat('Loss function value of optimal solution is: ', object$Loss,'\n')
 
-  out <- list()
-  out$PM <- PB
-  out$tab <- tab
-  out$loss <- object$Loss
-
-  return(out)
+  # out <- list()
+  # out$PM <- PB
+  # out$tab <- tab
+  # out$loss <- object$Loss
+  #
+  # return(out)
 }
