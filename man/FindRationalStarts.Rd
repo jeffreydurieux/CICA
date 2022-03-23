@@ -9,10 +9,11 @@ FindRationalStarts(
   DataList,
   nComp,
   nClus,
-  scale = TRUE,
+  scalevalue = NULL,
   center = TRUE,
   verbose = TRUE,
-  pseudo = NULL
+  pseudo = NULL,
+  pseudoFac = NULL
 )
 
 \method{plot}{rstarts}(x, type = 1, mdsdim = 2, ...)
@@ -24,13 +25,15 @@ FindRationalStarts(
 
 \item{nClus}{number of clusters}
 
-\item{scale}{scale each matrix to have an equal sum of squares}
+\item{scalevalue}{scale each matrix to have an equal sum of squares}
 
 \item{center}{mean center matrices}
 
 \item{verbose}{print output to console}
 
 \item{pseudo}{default is \code{NULL}}
+
+\item{pseudoFac}{how many pseudo starts per rational start}
 
 \item{x}{an object of \code{class} rstarts}
 
@@ -39,8 +42,6 @@ FindRationalStarts(
 \item{mdsdim}{2 for two dimensional mds configuration, 3 for a three dimensional configuration}
 
 \item{...}{optional arguments passed to \code{hclust} function}
-
-\item{pseudoFac}{how many pseudo starts per rational start}
 }
 \value{
 dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
