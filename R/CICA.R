@@ -9,9 +9,13 @@
 #' @import RNifti
 #' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom mclust adjustedRandIndex
 #
 #' @param DataList a list of matrices
-#' @param nStarts number of multiple starts
+#' @param RanStarts number of random starts
+#' @param RatStarts Generate rational starts
+#' @param pseudo  percentage value for perturbating rational starts to obtain pseudo rational starts
+#' @param pseudoFac factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts
 #' @param nComp number or vector of ICA components per cluster
 #' @param nClus number or vector of clusters
 #' @param userGrid user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters
@@ -38,7 +42,7 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-CICA <- function(DataList, nStarts, nComp, nClus, userGrid = NULL, scalevalue = NULL, center = TRUE, rational = NULL, maxiter = 100, verbose = TRUE, ctol = .000001){
+CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = NULL, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
   if(is.null(names(DataList))){
@@ -107,8 +111,6 @@ CICA <- function(DataList, nStarts, nComp, nClus, userGrid = NULL, scalevalue = 
     grid <- data.frame(nComp,nClus)
   }
 
-  ##### define rational and random starts ####
-
 
   # total loss
   Losstotal <- sum( sapply( seq_along(DataList),
@@ -122,8 +124,25 @@ CICA <- function(DataList, nStarts, nComp, nClus, userGrid = NULL, scalevalue = 
 
     if(grid$nClus[ng]==1){
       nS <- 1
+      startvecs <- matrix(rep(1,length(DataList)))
     }else{
-      nS <- nStarts
+      ##### define rational and random starts ####
+
+      randomstarts <- CICA:::GenRanStarts(RanStarts = RanStarts,
+                                          nClus = grid$nClus[ng],
+                                   nBlocks = length(DataList),
+                                   ARIlim = .2, itmax = 1000,
+                                   verbose = verbose)
+
+
+      # rationalstarts <- CICA:::GenRatStarts(DataList = DataList, nComp = grid$nComp[ng],
+      #                                       nClus = grid$nClus[ng],
+      #                                       scalevalue = scalevalue,
+      #                                center = center,verbose = verbose,
+      #                                pseudo = pseudo , pseudoFac = pseudoFac)
+
+      startvecs <- randomstarts$rs
+      nS <- ncol(startvecs)
     }
 
     for(st in 1:nS){
@@ -134,40 +153,41 @@ CICA <- function(DataList, nStarts, nComp, nClus, userGrid = NULL, scalevalue = 
       iter <- 1
 
       #### step 1 initialize P ####
-      if(!is.null(rational)){
-
-        if(class(rational) == 'rstarts'){
-
-          if(st <= dim(rational$rationalstarts)[2]){
-            if(verbose == TRUE){
-              cat('Type of start: Rational \n')
-            }
-            newclus <- rational$rationalstarts[,st]
-          }else{
-            if(verbose == TRUE){
-              cat('Type of start: Random \n')
-            }
-            newclus <- clusf(nBlocks, grid$nClus[ng])
-          }
-        }else{
-          if(st == 1){
-            if(verbose == TRUE){
-              cat('Type of start: Rational \n')
-            }
-            newclus <- rational
-          }else{
-            if(verbose == TRUE){
-              cat('Type of start: Random \n')
-            }
-            newclus <- clusf(nBlocks, grid$nClus[ng])
-          }
-        }
-      }else{
-        if(verbose == TRUE){
-          cat('Type of start: Random \n')
-        }
-        newclus <- clusf(nBlocks, grid$nClus[ng])
-      }
+      newclus <- startvecs[ ,st]
+      # if(!is.null(rational)){
+      #
+      #   if(class(rational) == 'rstarts'){
+      #
+      #     if(st <= dim(rational$rationalstarts)[2]){
+      #       if(verbose == TRUE){
+      #         cat('Type of start: Rational \n')
+      #       }
+      #       newclus <- rational$rationalstarts[,st]
+      #     }else{
+      #       if(verbose == TRUE){
+      #         cat('Type of start: Random \n')
+      #       }
+      #       newclus <- clusf(nBlocks, grid$nClus[ng])
+      #     }
+      #   }else{
+      #     if(st == 1){
+      #       if(verbose == TRUE){
+      #         cat('Type of start: Rational \n')
+      #       }
+      #       newclus <- rational
+      #     }else{
+      #       if(verbose == TRUE){
+      #         cat('Type of start: Random \n')
+      #       }
+      #       newclus <- clusf(nBlocks, grid$nClus[ng])
+      #     }
+      #   }
+      # }else{
+      #   if(verbose == TRUE){
+      #     cat('Type of start: Random \n')
+      #   }
+      #   newclus <- clusf(nBlocks, grid$nClus[ng])
+      # }
 
 
       repeat{

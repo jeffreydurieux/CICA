@@ -6,13 +6,16 @@
 \usage{
 CICA(
   DataList,
-  nStarts,
   nComp,
   nClus,
+  RanStarts,
+  RatStarts = FALSE,
+  pseudo,
+  pseudoFac,
+  rational = NULL,
   userGrid = NULL,
   scalevalue = NULL,
   center = TRUE,
-  rational = NULL,
   maxiter = 100,
   verbose = TRUE,
   ctol = 1e-06
@@ -21,19 +24,25 @@ CICA(
 \arguments{
 \item{DataList}{a list of matrices}
 
-\item{nStarts}{number of multiple starts}
-
 \item{nComp}{number or vector of ICA components per cluster}
 
 \item{nClus}{number or vector of clusters}
+
+\item{RanStarts}{number of random starts}
+
+\item{RatStarts}{Generate rational starts}
+
+\item{pseudo}{percentage value for perturbating rational starts to obtain pseudo rational starts}
+
+\item{pseudoFac}{factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts}
+
+\item{rational}{a rational starting seed, if NULL no rational starting seed is used}
 
 \item{userGrid}{user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters}
 
 \item{scalevalue}{desired sum of squares of the block scaling procedure}
 
 \item{center}{mean center matrices}
-
-\item{rational}{a rational starting seed, if NULL no rational starting seed is used}
 
 \item{maxiter}{maximum number of iterations for each start}
 
