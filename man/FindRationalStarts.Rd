@@ -39,6 +39,8 @@ FindRationalStarts(
 \item{mdsdim}{2 for two dimensional mds configuration, 3 for a three dimensional configuration}
 
 \item{...}{optional arguments passed to \code{hclust} function}
+
+\item{pseudoFac}{how many pseudo starts per rational start}
 }
 \value{
 dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values

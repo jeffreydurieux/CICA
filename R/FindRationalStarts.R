@@ -5,6 +5,7 @@
 #' @param scale scale each matrix to have an equal sum of squares
 #' @param center mean center matrices
 #' @param pseudo default is \code{NULL}
+#' @param pseudoFac how many pseudo starts per rational start
 #' @param verbose print output to console
 #'
 #' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
@@ -22,10 +23,10 @@
 
 #'
 FindRationalStarts <- function(DataList, nComp, nClus, scale = TRUE,
-                               center = TRUE, verbose = TRUE, pseudo = NULL){
+                               center = TRUE, verbose = TRUE, pseudo = NULL, pseudoFac=NULL){
 
 
-  ICAs <- CICA(DataList = DataList, nStarts = 1, nComp = nComp,
+    ICAs <- CICA(DataList = DataList, RanStarts = 1, nComp = nComp,
                nClus = length(DataList), scale = scale, center = center, verbose = F)
 
 
@@ -114,13 +115,13 @@ FindRationalStarts <- function(DataList, nComp, nClus, scale = TRUE,
     if(verbose == TRUE){
       cat("Perturbing rational starts to obtain pseudo-rational starts")
     }
-    perb1 <- perturbation(p_ward, percentage = pseudo)
-    perb2 <- perturbation(p_comp, percentage = pseudo)
-    perb3 <- perturbation(p_single, percentage = pseudo)
-    perb4 <- perturbation(p_average, percentage = pseudo)
-    perb5 <- perturbation(p_mcquitty, percentage = pseudo)
-    perb6 <- perturbation(p_median, percentage = pseudo)
-    perb7 <- perturbation(p_centroid, percentage = pseudo)
+    perb1 <- replicate(n = pseudoFac, perturbation(p_ward, percentage = pseudo))
+    perb2 <- replicate(n = pseudoFac, perturbation(p_comp, percentage = pseudo))
+    perb3 <- replicate(n = pseudoFac, perturbation(p_single, percentage = pseudo))
+    perb4 <- replicate(n = pseudoFac, perturbation(p_average, percentage = pseudo))
+    perb5 <- replicate(n = pseudoFac, perturbation(p_mcquitty, percentage = pseudo))
+    perb6 <- replicate(n = pseudoFac, perturbation(p_median, percentage = pseudo))
+    perb7 <- replicate(n = pseudoFac, perturbation(p_centroid, percentage = pseudo))
 
     output <- data.frame(p_ward, p_comp, p_single, p_average, p_mcquitty,
                          p_median, p_centroid,
