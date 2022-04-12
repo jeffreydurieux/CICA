@@ -127,21 +127,30 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pse
       startvecs <- matrix(rep(1,length(DataList)))
     }else{
       ##### define rational and random starts ####
+      if(!is.null(rational)){
+        startvecs <- rational
+      }
 
-      randomstarts <- CICA:::GenRanStarts(RanStarts = RanStarts,
-                                          nClus = grid$nClus[ng],
-                                   nBlocks = length(DataList),
-                                   ARIlim = .2, itmax = 1000,
-                                   verbose = verbose)
+      if(RanStarts != 0){
+        randomstarts <- CICA:::GenRanStarts(RanStarts = RanStarts,
+                                            nClus = grid$nClus[ng],
+                                            nBlocks = length(DataList),
+                                            ARIlim = .2, itmax = 1000,
+                                            verbose = verbose)
+        startvecs <- randomstarts$rs
+      }
+      if(RatStarts == TRUE){
+        rationalstarts <- CICA:::GenRatStarts(DataList = DataList, nComp = grid$nComp[ng],
+                                              nClus = grid$nClus[ng],
+                                              scalevalue = scalevalue,
+                                              center = center,verbose = verbose,
+                                              pseudo = pseudo , pseudoFac = pseudoFac)
+
+        startvecs <- cbind(startvecs, rationalstarts$rat$rationalstarts)
+      }
 
 
-      # rationalstarts <- CICA:::GenRatStarts(DataList = DataList, nComp = grid$nComp[ng],
-      #                                       nClus = grid$nClus[ng],
-      #                                       scalevalue = scalevalue,
-      #                                center = center,verbose = verbose,
-      #                                pseudo = pseudo , pseudoFac = pseudoFac)
 
-      startvecs <- randomstarts$rs
       nS <- ncol(startvecs)
     }
 
@@ -288,6 +297,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pse
     output$Loss <- TempOutput$`1`$Loss
     output$LossStarts <- LossStarts
     output$iterations <- TempOutput$`1`$iterations
+    output$starts <- startvecs
 
 
     class(output) <- 'CICA'

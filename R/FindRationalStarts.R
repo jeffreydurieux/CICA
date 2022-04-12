@@ -34,6 +34,9 @@ FindRationalStarts <- function(DataList, nComp, nClus, scalevalue = NULL,
 
   if(verbose == TRUE){
     cat("Hierarchical cluster analysis using Ward's method \n")
+    hcl0 <- hclust(d = d, method = 'ward.D')
+
+    cat("Hierarchical cluster analysis using Ward's method \n")
     hcl1 <- hclust(d = d, method = 'ward.D2')
 
     cat("Hierarchical cluster analysis using complete linkage \n")
@@ -55,6 +58,7 @@ FindRationalStarts <- function(DataList, nComp, nClus, scalevalue = NULL,
     hcl7 <- hclust(d = d, method = 'centroid')
 
   }else{
+    hcl0 <- hclust(d = d, method = 'ward.D')
     hcl1 <- hclust(d = d, method = 'ward.D2')
     hcl2 <- hclust(d = d, method = 'complete')
     hcl3 <- hclust(d = d, method = 'single')
@@ -64,7 +68,8 @@ FindRationalStarts <- function(DataList, nComp, nClus, scalevalue = NULL,
     hcl7 <- hclust(d = d, method = 'centroid')
   }
 
-  p_ward <- cutree(hcl1, k = nClus)
+  p_ward <- cutree(hcl0, k = nClus)
+  p_ward2 <- cutree(hcl1, k = nClus)
   p_comp <- cutree(hcl2, k = nClus)
   p_single <- cutree(hcl3, k = nClus)
   p_average <- cutree(hcl4, k = nClus)
@@ -115,7 +120,10 @@ FindRationalStarts <- function(DataList, nComp, nClus, scalevalue = NULL,
     if(verbose == TRUE){
       cat("Perturbing rational starts to obtain pseudo-rational starts")
     }
-    perb1 <- replicate(n = pseudoFac, perturbation(p_ward, percentage = pseudo))
+
+    #### add loop here to go over pseudo if it is a vector, see issue #4 github
+    perb0 <- replicate(n = pseudoFac, perturbation(p_ward, percentage = pseudo))
+    perb1 <- replicate(n = pseudoFac, perturbation(p_ward2, percentage = pseudo))
     perb2 <- replicate(n = pseudoFac, perturbation(p_comp, percentage = pseudo))
     perb3 <- replicate(n = pseudoFac, perturbation(p_single, percentage = pseudo))
     perb4 <- replicate(n = pseudoFac, perturbation(p_average, percentage = pseudo))
@@ -123,11 +131,11 @@ FindRationalStarts <- function(DataList, nComp, nClus, scalevalue = NULL,
     perb6 <- replicate(n = pseudoFac, perturbation(p_median, percentage = pseudo))
     perb7 <- replicate(n = pseudoFac, perturbation(p_centroid, percentage = pseudo))
 
-    output <- data.frame(p_ward, p_comp, p_single, p_average, p_mcquitty,
+    output <- data.frame(p_ward,p_ward2, p_comp, p_single, p_average, p_mcquitty,
                          p_median, p_centroid,
                          perb1, perb2, perb3, perb4, perb5, perb6, perb7)
   }else{
-    output <- data.frame(p_ward, p_comp, p_single, p_average, p_mcquitty,
+    output <- data.frame(p_ward, p_ward2, p_comp, p_single, p_average, p_mcquitty,
                          p_median, p_centroid)
   }
 

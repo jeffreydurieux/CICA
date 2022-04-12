@@ -4,12 +4,14 @@
 \alias{ExtractICA}
 \title{Extract Group ICA parameters}
 \usage{
-ExtractICA(DataList, nComp)
+ExtractICA(DataList, nComp, svd = TRUE)
 }
 \arguments{
 \item{DataList}{a list object to perform Group ICAs on}
 
 \item{nComp}{number of ICA components to extract}
+
+\item{svd}{}
 }
 \value{
 a list with cluster specific independent components

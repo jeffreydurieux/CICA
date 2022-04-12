@@ -92,11 +92,11 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
 
   if(RV == TRUE){
     RVs <- computeRVmat(x$Sr, dist = F, verbose = T)
-    out$RVs <- RVs
+    out$RVs <- round(RVs, digits = 3)
   }
 
   out$matchIndexMatrix <- m
-  out$matchTuckerMatrix <- mm
-  out$CongruenceList <- conList
+  out$matchTuckerMatrix <- round(mm, digits = 3)
+  out$CongruenceList <- lapply(conList, round, digits = 3)
   return(out)
 }
