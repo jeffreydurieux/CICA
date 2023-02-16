@@ -9,7 +9,7 @@ Lir <- function(Xi, SkL)
 {
   # compute Ahats
   Ah <- lapply(seq_along( SkL), function(i) {
-    crossprod(Xi, SkL[[i]]) %*% NMFN::mpinv( t(SkL[[i]]) %*% SkL[[i]])
+    crossprod(Xi, SkL[[i]]) %*% mpinv( t(SkL[[i]]) %*% SkL[[i]])
   })
 
   # compute Xhats --> Xhat^r

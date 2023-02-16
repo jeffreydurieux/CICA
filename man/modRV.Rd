@@ -4,7 +4,7 @@
 \alias{modRV}
 \title{The modified-RV coefficient}
 \usage{
-modRV(X, Yß)
+modRV(X, Y)
 }
 \arguments{
 \item{X}{first matrix, number of rows in X should corresponds to number of rows in Y}

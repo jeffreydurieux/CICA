@@ -3,7 +3,6 @@
 #'@description Main function to perform Clusterwise Independent Component Analysis
 #'
 #' @import ica
-#' @import NMFN
 #' @import plotly
 #' @import papayar
 #' @import RNifti
