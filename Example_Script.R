@@ -76,7 +76,15 @@ matcher(outnif, reference = '~/Documents/templates/23x_all_beckmann_8_and_csf_an
 matcher.CICA(outnif, RV = TRUE)
 matcher.CICA(outnif, reference = 'C:/Users/jeffr/OneDrive - Erasmus University Rotterdam/Data/23x_all_beckmann_8_and_csf_and_wm.nii.gz')
 
-### stopped  here ###
+
+##### two step functions #####
+Out_starts <- FindRationalStarts(DataList = CICA_data$X,nComp = 5,nClus = 4,scalevalue = 1000)
+
+plot.rstarts(Out_starts)
+plot.rstarts(Out_starts, type = 2)
+plot.rstarts(Out_starts, type = 2,mdsdim = 3, method = 'ward.D2')
+# note: if no method is specified, title of label method is empty
+# add default labeling method to the default plot
 
 data <- list()
 setwd('~/Repo_temp/P3/datatv/')
