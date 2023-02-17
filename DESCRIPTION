@@ -8,6 +8,7 @@ Depends:
     plotly,
     papayar,
     RNifti,
+    mclust,
     R (>= 2.10)
 Author: Jeffrey Durieux [aut, cre], Tom Wilderjans [aut]
 Maintainer: Jeffrey Durieux <durieux.jeffrey@gmail.com>
