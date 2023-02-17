@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' data('CICA_data', package = 'CICA')
-#' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
+#' output <- CICA(DataList = CICA_data$X, RanStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
 CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = NULL, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
 
