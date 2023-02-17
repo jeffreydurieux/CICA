@@ -19,7 +19,7 @@ GenRanStarts <- function(RanStarts, nClus, nBlocks, ARIlim = 0.2,
   while(ncol(rs) != RanStarts & it < itmax){
     it <- it + 1
     candidate <- clusf(nBlocks = nBlocks, nClus = nClus)
-    if(all(abs(apply(rs, MARGIN = 2, adjustedRandIndex, y = candidate)) < ARIlim)){
+    if(all(abs(apply(rs, MARGIN = 2, mclust::adjustedRandIndex, y = candidate)) < ARIlim)){
       rs <- cbind(rs, candidate)
     }
     if(verbose){
