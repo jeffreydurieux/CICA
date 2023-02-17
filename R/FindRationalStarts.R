@@ -1,11 +1,12 @@
 #'
 #' @param DataList a list of matrices
+#' @param RatStart type of rational start
 #' @param nComp number of ICA components to extract
 #' @param nClus number of clusters
 #' @param scalevalue scale each matrix to have an equal sum of squares
 #' @param center mean center matrices
 #' @param pseudo default is \code{NULL}
-#' @param pseudoFac how many pseudo starts per rational start
+#' @param pseudofact how many pseudo starts per rational start
 #' @param verbose print output to console
 #'
 #' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
@@ -22,8 +23,11 @@
 #' @references Durieux, J., & Wilderjans, T. F. (2019). Partitioning subjects based on high-dimensional fMRI data: comparison of several clustering methods and studying the influence of ICA data reduction in big data. Behaviormetrika, 46(2), 271-311.
 
 #'
-FindRationalStarts <- function(DataList, nComp, nClus, scalevalue = NULL,
-                               center = TRUE, verbose = TRUE, pseudo = NULL, pseudoFac=NULL){
+FindRationalStarts <- function(DataList, RatStart = 'all', nComp, nClus, scalevalue = NULL,
+                               center = TRUE, verbose = TRUE, pseudo = NULL, pseudofact=NULL){
+
+    ###JD: RatStart 'all' needs to be arranged. Also checks if supplied hcl method argument is correctly specified.
+  ### JD: pseudo/ pseudofact needs to be checked.
 
 
     ICAs <- CICA(DataList = DataList, RanStarts = 1, nComp = nComp,
