@@ -1,3 +1,6 @@
+#### note: papayar needs to be installed but is no longer available on CRAN
+#### this will lead to an error when installing CICA package
+#devtools::install_github('jeffreydurieux/CICA')
 library(CICA)
 ?CICA
 
