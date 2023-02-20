@@ -2,6 +2,8 @@
 #### this will lead to an error when installing CICA package
 devtools::install_github('jeffreydurieux/CICA')
 library(CICA)
+#startup messages
+
 ?CICA
 
 data('CICA_data', package = 'CICA')
@@ -85,6 +87,40 @@ plot.rstarts(Out_starts, type = 2)
 plot.rstarts(Out_starts, type = 2,mdsdim = 3, method = 'ward.D2')
 # note: if no method is specified, title of label method is empty
 # add default labeling method to the default plot
+
+
+##### empirical application #####
+set.seed(42)
+data_fmri <- loadNIfTIs(dir = '~/Subselectionfolder/', toMatrix = TRUE)
+
+names(data_fmri)
+
+Out_starts_EmpirApplic <- FindRationalStarts(DataList = data_fmri, nComp = 10,
+                                             nClus = 2, pseudo = c(0.2, 0.3, 0.4))
+
+output_CICA <- CICA(DataList = data_fmri, nComp = 10, nClus = 2,
+                    RanStarts = 30, rational = Out_starts_EmpirApplic$starts,
+                    scalevalue = 1000, center = TRUE)
+
+summary(output_CICA)
+
+labels <- c(rep('AD',20), rep('EC',20))
+table(labels, output_CICA$P)
+
+mclust::adjustedRandIndex(labels, output_CICA$P)
+
+labels_numerical <- c( rep(1, 20), rep(2, 20))
+yardstick::bal_accuracy_vec(label_numerical, output_CICA$P)
+
+
+plot(output_CICA)
+plot(output_CICA$Ais[[ 1 ]][ , 2], type ='l')
+
+
+matcher(output_CICA, reference = 'TemplateFolder/KnownNetworks.nii.gz')
+
+
+##### old below, keep it for now #######
 
 data <- list()
 setwd('~/Repo_temp/P3/datatv/')
