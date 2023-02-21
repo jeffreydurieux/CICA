@@ -90,35 +90,56 @@ plot.rstarts(Out_starts, type = 2,mdsdim = 3, method = 'ward.D2')
 
 
 ##### empirical application #####
-set.seed(42)
-data_fmri <- loadNIfTIs(dir = '~/Subselectionfolder/', toMatrix = TRUE)
-
-names(data_fmri)
-
-Out_starts_EmpirApplic <- FindRationalStarts(DataList = data_fmri, nComp = 10,
-                                             nClus = 2, pseudo = c(0.2, 0.3, 0.4))
-
-output_CICA <- CICA(DataList = data_fmri, nComp = 10, nClus = 2,
-                    RanStarts = 30, rational = Out_starts_EmpirApplic$starts,
-                    scalevalue = 1000, center = TRUE)
-
-summary(output_CICA)
-
-labels <- c(rep('AD',20), rep('EC',20))
-table(labels, output_CICA$P)
-
-mclust::adjustedRandIndex(labels, output_CICA$P)
-
-labels_numerical <- c( rep(1, 20), rep(2, 20))
-yardstick::bal_accuracy_vec(label_numerical, output_CICA$P)
+### see Application_Graz.R script for other details
+### parts here are already precomputed results (done on shark)
+lab <- c(rep('EC',20), rep('AD',20))
+load('C:/Users/jeffr/OneDrive - Erasmus University Rotterdam/Documents/CICAsoftware/Code/subsamp_rat.Rdata')
+plot(rat)# default plot is called
+plot.rstarts(rat)
+plot.rstarts(rat, method = 'ward.D2')
+plot.rstarts(rat, method = 'ward.D2', type = 2)
+plot.rstarts(rat, method = 'ward.D2', type = 2, mdsdim = 3)
 
 
-plot(output_CICA)
-plot(output_CICA$Ais[[ 1 ]][ , 2], type ='l')
+### load lowest loss object (one from shark)
+load('C:/Users/jeffr/OneDrive - Erasmus University Rotterdam/Documents/CICAsoftware/Code/lowestloss_cicaGraz.Rdata')
+out$Loss
+out$LossStarts
 
 
-matcher(output_CICA, reference = 'TemplateFolder/KnownNetworks.nii.gz')
+summary(out) # does not work properly
+summary.CICA(out)
 
+table(lab, out$P)
+mclust::adjustedRandIndex(lab, out$P)
+
+labels_numerical <- as.factor(rep(1,20), rep(2,20))
+fac <- ifelse(out$P==1,'AD','EC')
+fac <- as.factor(fac)
+labb <- as.factor(lab)
+yardstick::accuracy_vec(labb,fac)
+
+library(caret)
+confusionMatrix(fac,labb)
+
+
+#### add zeros brain mask to output ###
+library(oro.nifti)
+mask <- readNIfTI('C:/Users/jeffr/OneDrive - Erasmus University Rotterdam/Data/brainmask_23_28_23.nii.gz')
+idxbrain <- which(mask == 1)
+addZeros <- function(idx, cicaout, dim){
+  for(i in 1:length(cicaout$Sr)){
+    zeros <- matrix(data = 0, ncol = dim[4], nrow = dim[1]*dim[2]*dim[3])
+    zeros[idx, ] <- cicaout$Sr[[i]]
+    cicaout$Sr[[i]] <- zeros
+  }
+  return(cicaout)
+}
+outt <- addZeros(idx=idxbrain, out, dim=c(23,28,23,10))
+
+plot.CICA(outt)
+
+matcher.CICA(outt, reference = 'C:/Users/jeffr/OneDrive - Erasmus University Rotterdam/Data/23x_all_beckmann_8_and_csf_and_wm.nii.gz')
 
 ##### old below, keep it for now #######
 
