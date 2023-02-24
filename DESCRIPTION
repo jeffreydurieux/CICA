@@ -6,7 +6,6 @@ Date: 2022-03-22
 Depends: 
     ica,
     plotly,
-    papayar,
     RNifti,
     mclust,
     R (>= 2.10)
