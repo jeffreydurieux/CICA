@@ -8,7 +8,7 @@ library(CICA)
 
 data('CICA_data', package = 'CICA')
 attach(CICA_data)
-
+object <- CICA(DataList = CICA_data$X, nComp = 5, nClus = 4, RanStarts = 1)
 # multi cica
 multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
                        userGrid = NULL, RanStarts = 30, RatStarts = FALSE, pseudo = c(0.1, 0.2),  pseudoFac = 2, rational = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001)
@@ -139,6 +139,7 @@ outt <- addZeros(idx=idxbrain, out, dim=c(23,28,23,10))
 
 plot.CICA(outt)
 
+### template nifti remove column
 matcher.CICA(outt, reference = 'C:/Users/jeffr/OneDrive - Erasmus University Rotterdam/Data/23x_all_beckmann_8_and_csf_and_wm.nii.gz')
 
 ##### old below, keep it for now #######

@@ -16,7 +16,7 @@
 #' summary(output)
 summary.CICA <- function(object, ...){
 
-  #names(object$P) <- 1:length(object$P)
+
 
   cat('Partitioning matrix P: \n' )
   PB <- matrix(0, nrow = length(object$P), ncol = length(unique(object$P)))
