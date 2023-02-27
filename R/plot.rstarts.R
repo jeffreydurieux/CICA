@@ -3,13 +3,20 @@
 #' @param x an object of \code{class} rstarts
 #' @param type type of plot, 1 for a dendrogram, 2 for a multidimensional scaling configuration
 #' @param mdsdim 2 for two dimensional mds configuration, 3 for a three dimensional configuration
+#' @param nClus Number of clusters for rectangles in dendrogram, default NULL is based on number of clusters present in the object
 #' @param ... optional arguments passed to \code{hclust} function
 #' @export
 #'
 #'
-plot.rstarts <- function(x, type = 1, mdsdim = 2, ...){
+plot.rstarts <- function(x, type = 1, mdsdim = 2, nClus = NULL,...){
 
-  nClus <- length( unique( x$rationalstarts$p_ward) )
+
+  if(is.null(nClus)){
+    nClus <- length( unique( x$rationalstarts[,1]) )
+  }else{
+    nClus <- nClus
+  }
+
 
   hcl <- hclust(x$RVdist, method = ...)
   k <- cutree(hcl, k = nClus)
