@@ -44,6 +44,17 @@
 CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = NULL, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
+
+  # Feasible randomstart number check (limit is 10% of Stirling number of the 2nd kind)
+  m <- 0
+  for (j in 0:nClus){
+    m <- m + (-1)^(nClus - j) * choose(nClus, j) * j^length(DataList)
+  }
+  stirNum <- m/factorial(nClus)
+  if(RanStarts >= stirNum*.1){
+    stop('Too many RanStarts requested, lower the number of RanStarts')
+  }
+
   if(is.null(names(DataList))){
     filenames <- 1:length(DataList)
   }else{
