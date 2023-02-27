@@ -5,8 +5,8 @@
 #' @param nClus number of clusters
 #' @param scalevalue scale each matrix to have an equal sum of squares
 #' @param center mean center matrices
-#' @param pseudo default is \code{NULL}
-#' @param pseudofact how many pseudo starts per rational start
+#' @param pseudo percentage value for perturbating rational starts to obtain pseudo rational starts
+#' @param pseudoFac how many pseudo starts per rational start
 #' @param verbose print output to console
 #'
 #' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
@@ -24,136 +24,85 @@
 
 #'
 FindRationalStarts <- function(DataList, RatStart = 'all', nComp, nClus, scalevalue = NULL,
-                               center = TRUE, verbose = TRUE, pseudo = NULL, pseudofact=NULL){
+                               center = TRUE, verbose = TRUE, pseudo = NULL, pseudoFac=NULL){
 
     ###JD: RatStart 'all' needs to be arranged. Also checks if supplied hcl method argument is correctly specified.
   ### JD: pseudo/ pseudofact needs to be checked.
+  METHODS <- c("ward.D", "single", "complete", "average", "mcquitty",
+               "median", "centroid", "ward.D2", 'all')
+  i.meth <- pmatch(RatStart, METHODS)
 
 
-    ICAs <- CICA(DataList = DataList, RanStarts = 1, nComp = nComp,
+  ICAs <- CICA(DataList = DataList, RanStarts = 1, nComp = nComp,
                nClus = length(DataList), scalevalue = scalevalue, center = center, verbose = F)
-
-
   d <- computeRVmat(DataList = ICAs$Sr, dist = TRUE, verbose = verbose)
 
-  if(verbose == TRUE){
-    cat("Hierarchical cluster analysis using Ward's method \n")
+  if(i.meth == 9){
     hcl0 <- hclust(d = d, method = 'ward.D')
-
-    cat("Hierarchical cluster analysis using Ward's method \n")
     hcl1 <- hclust(d = d, method = 'ward.D2')
-
-    cat("Hierarchical cluster analysis using complete linkage \n")
     hcl2 <- hclust(d = d, method = 'complete')
-
-    cat("Hierarchical cluster analysis using single linkage \n")
     hcl3 <- hclust(d = d, method = 'single')
-
-    cat("Hierarchical cluster analysis using unweighted average linkage \n")
     hcl4 <- hclust(d = d, method = 'average')
-
-    cat("Hierarchical cluster analysis using Weighted average linkage \n")
     hcl5 <- hclust(d = d, method = 'mcquitty')
-
-    cat("Hierarchical cluster analysis using median linkage \n")
     hcl6 <- hclust(d = d, method = 'median')
-
-    cat("Hierarchical cluster analysis using centroid linkage \n")
     hcl7 <- hclust(d = d, method = 'centroid')
 
+    p_ward <- cutree(hcl0, k = nClus)
+    p_ward2 <- cutree(hcl1, k = nClus)
+    p_comp <- cutree(hcl2, k = nClus)
+    p_single <- cutree(hcl3, k = nClus)
+    p_average <- cutree(hcl4, k = nClus)
+    p_mcquitty <- cutree(hcl5, k = nClus)
+    p_median <- cutree(hcl6, k = nClus)
+    p_centroid <- cutree(hcl7, k = nClus)
+
+    ps <- data.frame(p_ward, p_ward2, p_comp, p_single, p_average, p_mcquitty,
+                     p_median, p_centroid)
   }else{
-    hcl0 <- hclust(d = d, method = 'ward.D')
-    hcl1 <- hclust(d = d, method = 'ward.D2')
-    hcl2 <- hclust(d = d, method = 'complete')
-    hcl3 <- hclust(d = d, method = 'single')
-    hcl4 <- hclust(d = d, method = 'average')
-    hcl5 <- hclust(d = d, method = 'mcquitty')
-    hcl6 <- hclust(d = d, method = 'median')
-    hcl7 <- hclust(d = d, method = 'centroid')
+    hcl <- hclust(d = d, method = METHODS[i.meth])
+    ps <- cutree(hcl, k = nClus)
+    ps <- data.frame(ps)
+    colnames(ps) <- METHODS[i.meth]
   }
 
-  p_ward <- cutree(hcl0, k = nClus)
-  p_ward2 <- cutree(hcl1, k = nClus)
-  p_comp <- cutree(hcl2, k = nClus)
-  p_single <- cutree(hcl3, k = nClus)
-  p_average <- cutree(hcl4, k = nClus)
-  p_mcquitty <- cutree(hcl5, k = nClus)
-  p_median <- cutree(hcl6, k = nClus)
-  p_centroid <- cutree(hcl7, k = nClus)
 
-  if(!is.null(pseudo)){
+    if(!is.null(pseudo)){
 
-    if(pseudo >= 1 | pseudo <= 0){
-      stop('pseudo should be a value between 0 and 1')
-    }
-
-    perturbation <- function(p, percentage = 0.1){
-
-      clusters <- sort(unique(p))
-      sel <- ceiling(length(p) * percentage )
-      selected <- sample(1:length(p), size = sel, replace = F)
-
-      if(length(selected) == 1){
-        # change one cluster
-        oriclus <- p[selected]
-        newclus <- which(clusters != oriclus)
-
-        if(length(newclus) > 1){
-          newclus <- sample(newclus, size = 1)
-        }
-
-        np <- replace(p, selected, newclus)
-
-      }else{
-        # change multiple clusters
-        np <- p
-        for(i in 1:length(selected)){
-          oriclus <- p[selected[i]]
-          newclus <- which(clusters != oriclus)
-
-          if(length(newclus) > 1){
-            newclus <- sample(newclus, size = 1)
-          }
-
-          np <- replace(np, selected[i], newclus)
-        }
+      if(all(pseudo >= 0 & pseudo <=1) == FALSE){
+        stop('pseudo should be a value between 0 and 1')
       }
-      return(np)
+
+
+      #### add loop here to go over pseudo if it is a vector, see issue #4 github
+      Ppseudo_i <- list()
+      for(i in 1:pseudoFac){
+        Ppseudo_j <- list()
+        for(j in 1:length(pseudo)){
+          perbs <- matrix(data = NA, nrow = nrow(ps), ncol = ncol(ps))
+          for(k in 1:ncol(ps)){
+            perbs[,k] <- perturbation(ps[ ,k], percentage = pseudo[j])
+          }
+          colnames(perbs) <- paste(names(ps),'Pseudo',
+                                   rep(pseudo[j], times = ncol(ps)), 'Fac',i, sep = '')
+          Ppseudo_j[[j]] <- data.frame(perbs)
+        }
+        Ppseudo_i[[i]] <- data.frame(Ppseudo_j)
+
+      }
+      Ppseudo <- data.frame(Ppseudo_i)
+      ps <- cbind(ps, Ppseudo)
     }
-
-    if(verbose == TRUE){
-      cat("Perturbing rational starts to obtain pseudo-rational starts")
-    }
-
-    #### add loop here to go over pseudo if it is a vector, see issue #4 github
-    perb0 <- replicate(n = pseudoFac, perturbation(p_ward, percentage = pseudo))
-    perb1 <- replicate(n = pseudoFac, perturbation(p_ward2, percentage = pseudo))
-    perb2 <- replicate(n = pseudoFac, perturbation(p_comp, percentage = pseudo))
-    perb3 <- replicate(n = pseudoFac, perturbation(p_single, percentage = pseudo))
-    perb4 <- replicate(n = pseudoFac, perturbation(p_average, percentage = pseudo))
-    perb5 <- replicate(n = pseudoFac, perturbation(p_mcquitty, percentage = pseudo))
-    perb6 <- replicate(n = pseudoFac, perturbation(p_median, percentage = pseudo))
-    perb7 <- replicate(n = pseudoFac, perturbation(p_centroid, percentage = pseudo))
-
-    output <- data.frame(p_ward,p_ward2, p_comp, p_single, p_average, p_mcquitty,
-                         p_median, p_centroid,
-                         perb1, perb2, perb3, perb4, perb5, perb6, perb7)
-  }else{
-    output <- data.frame(p_ward, p_ward2, p_comp, p_single, p_average, p_mcquitty,
-                         p_median, p_centroid)
-  }
 
   # check if no empty clusters are present
-  temp <- output
-  for(i in 1:ncol(output)){
-    temp[,i] <- SearchEmptyClusters(nClus, newcluster = output[, i])
+  temp <- ps
+  for(i in 1:ncol(temp)){
+    temp[,i] <- SearchEmptyClusters(nClus, newcluster = ps[, i])
   }
-
-  output <- temp
+  ps <- temp
 
 
   out <- list()
-  out$rationalstarts <- output
+  out$rationalstarts <- ps
   out$RVdist <- d
 
   class(out) <- 'rstarts'
