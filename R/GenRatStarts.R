@@ -9,7 +9,7 @@
 #' @param pseudo  percentage used for perturbation rational starts (between 0)
 #' @param pseudoFac multiplication factor for pseudo rational starts
 #'
-#' @return
+#' @return out
 #'
 GenRatStarts <- function(DataList, nComp, nClus, scalevalue, center, verbose, pseudo, pseudoFac){
 

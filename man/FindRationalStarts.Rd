@@ -7,6 +7,7 @@
 \usage{
 FindRationalStarts(
   DataList,
+  RatStart = "all",
   nComp,
   nClus,
   scalevalue = NULL,
@@ -16,14 +17,16 @@ FindRationalStarts(
   pseudoFac = NULL
 )
 
-\method{plot}{rstarts}(x, type = 1, mdsdim = 2, ...)
+\method{plot}{rstarts}(x, type = 1, mdsdim = 2, nClus = NULL, ...)
 }
 \arguments{
 \item{DataList}{a list of matrices}
 
+\item{RatStart}{type of rational start}
+
 \item{nComp}{number of ICA components to extract}
 
-\item{nClus}{number of clusters}
+\item{nClus}{Number of clusters for rectangles in dendrogram, default NULL is based on number of clusters present in the object}
 
 \item{scalevalue}{scale each matrix to have an equal sum of squares}
 
@@ -31,7 +34,7 @@ FindRationalStarts(
 
 \item{verbose}{print output to console}
 
-\item{pseudo}{default is \code{NULL}}
+\item{pseudo}{percentage value for perturbating rational starts to obtain pseudo rational starts}
 
 \item{pseudoFac}{how many pseudo starts per rational start}
 

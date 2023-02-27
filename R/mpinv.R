@@ -2,7 +2,7 @@
 #'
 #' @param X
 #'
-#' @return
+#' @return mpinv
 #'
 
 mpinv <- function (X)

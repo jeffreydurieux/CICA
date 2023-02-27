@@ -33,7 +33,7 @@ GenRatStarts(
 \item{pseudoFac}{multiplication factor for pseudo rational starts}
 }
 \value{
-
+out
 }
 \description{
 Title

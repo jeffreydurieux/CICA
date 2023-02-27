@@ -63,7 +63,7 @@ Main function to perform Clusterwise Independent Component Analysis
 }
 \examples{
 data('CICA_data', package = 'CICA')
-output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
+output <- CICA(DataList = CICA_data$X, RanStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 summary(output)
 }
 \author{

@@ -10,7 +10,7 @@ mpinv(X)
 \item{X}{}
 }
 \value{
-
+mpinv
 }
 \description{
 Moore Penrose inverse
