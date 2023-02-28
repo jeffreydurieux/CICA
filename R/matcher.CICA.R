@@ -14,14 +14,15 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
   if(class(reference)[1] == 'numeric'){
     ncomp <- ncol(x$Sr[[1]])
     m <- 1:ncomp
-    mm <- 1:ncomp
+    mm <- rep(1, ncomp)
     conList <- vector(mode = 'list', length =lsr-1)
     toSelect <- 1:lsr
     toSelect <- toSelect[-reference]
 
     for(i in 1:length(toSelect)){
 
-      con <- cor(x$Sr[[reference]], x$Sr[[ toSelect[i]]] )
+      #con <- cor(x$Sr[[reference]], x$Sr[[ toSelect[i]]] )
+      con <- multiway::congru(x$Sr[[reference]], x$Sr[[ toSelect[i]]] )
       conList[[i]] <- con
       Cluster2 <- apply(abs(con) , MARGIN = 1, which.max)
       max <- apply(abs(con) , MARGIN = 1, max)
@@ -41,11 +42,13 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
     ncomp <- ncol(nif)
 
     m <- 1:ncomp
-    mm <- 1:ncomp
+    mm <- rep(1, ncomp)
     conList <- vector(mode = 'list', length = length(x$Sr))
 
     for(i in 1:lsr){
-      con <- cor(nif, x$Sr[[ i ]] )
+      #con <- cor(nif, x$Sr[[ i ]] )
+      con <- multiway::congru(nif, x$Sr[[ i ]] )
+
       conList[[i]] <- con
       whichm <- apply(abs(con) , MARGIN = 1, which.max)
       max <- apply(abs(con) , MARGIN = 1, max)
@@ -65,11 +68,12 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
   }else if(class(reference)[1] == 'matrix'){
     ncomp <- ncol(reference)
     m <- 1:ncomp
-    mm <- 1:ncomp
+    mm <- rep(1, ncomp)
     conList <- vector(mode = 'list', length = length(x$Sr))
 
     for(i in 1:lsr){
       con <- cor(reference, x$Sr[[ i ]] )
+      con <- multiway::congru(reference, x$Sr[[ i ]] )
       conList[[i]] <- con
       whichm <- apply(abs(con) , MARGIN = 1, which.max)
       max <- apply(abs(con) , MARGIN = 1, max)
@@ -89,14 +93,12 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
   }
 
   out <- list()
-
+  out$matchIndexMatrix <- m
+  out$matchTuckerMatrix <- round(mm, digits = 3)
+  out$CongruenceList <- lapply(conList, round, digits = 3)
   if(RV == TRUE){
     RVs <- computeRVmat(x$Sr, dist = F, verbose = T)
     out$RVs <- round(RVs, digits = 3)
   }
-
-  out$matchIndexMatrix <- m
-  out$matchTuckerMatrix <- round(mm, digits = 3)
-  out$CongruenceList <- lapply(conList, round, digits = 3)
   return(out)
 }
