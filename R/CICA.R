@@ -12,7 +12,7 @@
 #
 #' @param DataList a list of matrices
 #' @param RanStarts number of random starts
-#' @param RatStarts Generate rational starts
+#' @param RatStarts Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete')
 #' @param pseudo  percentage value for perturbating rational starts to obtain pseudo rational starts
 #' @param pseudoFac factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts
 #' @param nComp number or vector of ICA components per cluster
@@ -41,19 +41,36 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, RanStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = NULL, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
+CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = NULL, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
 
   # Feasible randomstart number check (limit is 10% of Stirling number of the 2nd kind)
-  m <- 0
-  for (j in 0:nClus){
-    m <- m + (-1)^(nClus - j) * choose(nClus, j) * j^length(DataList)
+  if(RanStarts > 1){
+    m <- 0
+    minClus <- min(nClus)
+    if(minClus == 1){
+      minClus <- 2
+    }
+    for (j in 0:minClus){
+      m <- m + (-1)^(minClus - j) * choose(minClus, j) * j^length(DataList)
+    }
+    stirNum <- m/factorial(minClus)
+
+    if(RanStarts >= stirNum*.1){
+      stop('Too many RanStarts requested, lower the number of RanStarts')
+    }
   }
-  stirNum <- m/factorial(nClus)
-  if(RanStarts >= stirNum*.1){
-    stop('Too many RanStarts requested, lower the number of RanStarts')
+
+  if(!is.null(RatStarts)){
+    METHODS <- c("ward.D", "single", "complete", "average", "mcquitty",
+                 "median", "centroid", "ward.D2", 'all')
+    i.meth <- pmatch(RatStarts, METHODS)
+    if(is.na(i.meth)){
+      stop('Invalid RatStart argument')
+    }
   }
+
 
   if(is.null(names(DataList))){
     filenames <- 1:length(DataList)
@@ -73,6 +90,13 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pse
   if (is.list(DataList) == FALSE){
     stop('Provided DataList is not a list object')
   }
+
+  if(!is.null(pseudo)){
+    if(all(pseudo >= 0 & pseudo <=1) == FALSE){
+      stop('pseudo should be a value between 0 and 1')
+    }
+  }
+
 
 
   #if( all(sapply(DataList, class)[1,] == 'matrix') == FALSE){
@@ -149,8 +173,8 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pse
                                             verbose = verbose)
         startvecs <- randomstarts$rs
       }
-      if(RatStarts == TRUE){
-        rationalstarts <- CICA:::GenRatStarts(DataList = DataList, nComp = grid$nComp[ng],
+      if(!is.null(RatStarts)){
+        rationalstarts <- CICA:::GenRatStarts(DataList = DataList,RatStarts = RatStarts, nComp = grid$nComp[ng],
                                               nClus = grid$nClus[ng],
                                               scalevalue = scalevalue,
                                               center = center,verbose = verbose,
@@ -289,7 +313,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=FALSE, pseudo, pse
     P <- TempOutput$`1`$P
     Sr <- TempOutput$`1`$Sr
     Ais <- lapply( seq_along(DataList), function(anom){
-      crossprod(DataList[[anom]], Sr[[ P[anom] ]]) %*% NMFN::mpinv( t(Sr[[ P[anom] ]]) %*% Sr[[ P[anom] ]])
+      crossprod(DataList[[anom]], Sr[[ P[anom] ]]) %*% mpinv( t(Sr[[ P[anom] ]]) %*% Sr[[ P[anom] ]])
     })
 
     # if(is.null(names(DataList))){

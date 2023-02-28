@@ -6,6 +6,7 @@
 \usage{
 GenRatStarts(
   DataList,
+  RatStarts,
   nComp,
   nClus,
   scalevalue,
@@ -17,6 +18,8 @@ GenRatStarts(
 }
 \arguments{
 \item{DataList}{DataList}
+
+\item{RatStarts}{Type of rational start}
 
 \item{nComp}{number of components}
 

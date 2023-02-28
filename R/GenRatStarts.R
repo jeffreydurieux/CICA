@@ -1,6 +1,7 @@
 #' Title
 #'
 #' @param DataList DataList
+#' @param RatStarts Type of rational start
 #' @param nComp    number of components
 #' @param nClus    number of clusters
 #' @param scalevalue value for blockscaling procedure
@@ -11,10 +12,10 @@
 #'
 #' @return out
 #'
-GenRatStarts <- function(DataList, nComp, nClus, scalevalue, center, verbose, pseudo, pseudoFac){
+GenRatStarts <- function(DataList, RatStarts, nComp, nClus, scalevalue, center, verbose, pseudo, pseudoFac){
 
 
-  rat <- FindRationalStarts(DataList = DataList, nComp = nComp, nClus = nClus,
+  rat <- FindRationalStarts(DataList = DataList, RatStarts = RatStarts, nComp = nComp, nClus = nClus,
                             scalevalue = scalevalue, center = center, verbose = verbose,
                             pseudo = pseudo, pseudoFac = pseudoFac)
 

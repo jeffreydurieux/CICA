@@ -1,9 +1,9 @@
-#' Summary method for class CICA
+#' Summary method for class MultipleCICA
 #' @description Summarize a CICA analysis
 #' @param object Object of the type produced by \code{\link{CICA}}
 #' @param ... Additional arguments
 #'
-#' @return \code{summary.CICA} returns an overview of the estimated clustering of a \code{\link{CICA}} analysis
+#' @return \code{summary.MultipleCICA} returns an overview of the estimated clustering of a \code{\link{CICA}} analysis
 #' \item{PM}{Partitioning matrix}
 #' \item{tab}{tabulation of the clustering}
 #' \item{Loss}{Loss function value of the solution}
@@ -14,7 +14,16 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-summary.CICA <- function(object, ...){
+summary.MultipleCICA <- function(object, ...){
+
+  cat('MultipleCICA object, Sequential Scree procedure used to determine optimal model\n')
+  modsel <- SequentialScree(object)
+  id <- paste('Q',modsel$optimalQ,'R',modsel$optimalR, sep = '_')
+  cat('Optimal model: ', id, '\n')
+  id <- which(id == names(object))
+  object <- object[[id]]
+
+
 
 
   cat('Partitioning matrix P: \n' )

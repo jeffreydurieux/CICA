@@ -9,8 +9,8 @@ CICA(
   nComp,
   nClus,
   RanStarts,
-  RatStarts = FALSE,
-  pseudo,
+  RatStarts = NULL,
+  pseudo = NULL,
   pseudoFac,
   rational = NULL,
   userGrid = NULL,
@@ -30,7 +30,7 @@ CICA(
 
 \item{RanStarts}{number of random starts}
 
-\item{RatStarts}{Generate rational starts}
+\item{RatStarts}{Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete')}
 
 \item{pseudo}{percentage value for perturbating rational starts to obtain pseudo rational starts}
 

@@ -1,6 +1,6 @@
 #'
 #' @param DataList a list of matrices
-#' @param RatStart type of rational start
+#' @param RatStarts type of rational start. 'all' computes all types of hclust methods
 #' @param nComp number of ICA components to extract
 #' @param nClus number of clusters
 #' @param scalevalue scale each matrix to have an equal sum of squares
@@ -23,14 +23,15 @@
 #' @references Durieux, J., & Wilderjans, T. F. (2019). Partitioning subjects based on high-dimensional fMRI data: comparison of several clustering methods and studying the influence of ICA data reduction in big data. Behaviormetrika, 46(2), 271-311.
 
 #'
-FindRationalStarts <- function(DataList, RatStart = 'all', nComp, nClus, scalevalue = NULL,
+FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalevalue = NULL,
                                center = TRUE, verbose = TRUE, pseudo = NULL, pseudoFac=NULL){
 
-    ###JD: RatStart 'all' needs to be arranged. Also checks if supplied hcl method argument is correctly specified.
-  ### JD: pseudo/ pseudofact needs to be checked.
   METHODS <- c("ward.D", "single", "complete", "average", "mcquitty",
                "median", "centroid", "ward.D2", 'all')
-  i.meth <- pmatch(RatStart, METHODS)
+  i.meth <- pmatch(RatStarts, METHODS)
+  if(is.na(i.meth)){
+    stop('Invalid RatStart argument')
+  }
 
 
   ICAs <- CICA(DataList = DataList, RanStarts = 1, nComp = nComp,

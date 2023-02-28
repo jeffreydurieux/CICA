@@ -21,6 +21,7 @@ GenRanStarts <- function(RanStarts, nClus, nBlocks, ARIlim = 0.2,
     candidate <- clusf(nBlocks = nBlocks, nClus = nClus)
     if(all(abs(apply(rs, MARGIN = 2, mclust::adjustedRandIndex, y = candidate)) < ARIlim)){
       rs <- cbind(rs, candidate)
+      colnames(rs) <- rep('RandomStart', times = ncol(rs))
     }
     if(verbose){
       cat(ncol(rs), fill = TRUE)

@@ -7,7 +7,7 @@
 \usage{
 FindRationalStarts(
   DataList,
-  RatStart = "all",
+  RatStarts = "all",
   nComp,
   nClus,
   scalevalue = NULL,
@@ -22,7 +22,7 @@ FindRationalStarts(
 \arguments{
 \item{DataList}{a list of matrices}
 
-\item{RatStart}{type of rational start}
+\item{RatStarts}{type of rational start. 'all' computes all types of hclust methods}
 
 \item{nComp}{number of ICA components to extract}
 
