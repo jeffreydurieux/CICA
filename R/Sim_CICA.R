@@ -6,15 +6,27 @@
 #' @param voxels number of voxels
 #' @param timepoints number of time points
 #' @param E proportion of independent gaussian noise
+#' @param overlap amount of overlap between S across clusters. Smaller value means more overlap
 #'
 #' @return a list with simulated CICA data
 #' @export
 #'
 #' @examples Xe <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10, E = .2)
 
-Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E){
-  Sr <- lapply(1:R, function(x)
-    replicate(n = Q, icasamp(dname = 'b', nsamp = voxels,query = 'rnd')))
+Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E, overlap=NULL){
+  if(!is.null(overlap)){
+    Sbase <- replicate(n = Q, runif(n = voxels, min = -1, max = 1))
+    S <- lapply(1:R, function(x)
+      replicate(n = Q, runif(n = voxels, min = -overlap, max = overlap)))
+
+    Sr <- lapply(seq_along(S), function(x) Sbase + S[[x]])
+
+    RVs <- computeRVmat(DataList = Sr, dist = FALSE, verbose = FALSE)
+
+  }else{
+    Sr <- lapply(1:R, function(x)
+      replicate(n = Q, icasamp(dname = 'b', nsamp = voxels,query = 'rnd')))
+  }
 
   Air <- lapply(1:R, FUN = function(x) lapply(1:Nr, function(x)
     replicate(n = Q, runif(timepoints, min = -2, max = 2))))
@@ -43,6 +55,10 @@ Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E){
   out$X <- Xe
   out$Sr <- Sr
   out$Air <- Air
+
+  if(!is.null(overlap)){
+    out$RVs <- RVs
+  }
   return(out)
 }
 
