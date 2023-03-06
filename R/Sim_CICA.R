@@ -7,13 +7,14 @@
 #' @param timepoints number of time points
 #' @param E proportion of independent gaussian noise
 #' @param overlap amount of overlap between S across clusters. Smaller value means more overlap
+#' @param externalscore add simulated external score (default is FALSE)
 #'
 #' @return a list with simulated CICA data
 #' @export
 #'
 #' @examples Xe <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10, E = .2)
 
-Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E, overlap=NULL){
+Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E, overlap=NULL, externalscore = FALSE){
   if(!is.null(overlap)){
     Sbase <- replicate(n = Q, runif(n = voxels, min = -1, max = 1))
     S <- lapply(1:R, function(x)
@@ -59,6 +60,21 @@ Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E, overlap=NULL){
   if(!is.null(overlap)){
     out$RVs <- RVs
   }
+
+  if(externalscore == TRUE){
+    score <- list()
+    for(i in 1:R){
+      if((i %% 2) == 0){
+        score[[i]] <- rnorm(Nr, mean = 25 + runif(1, max=3))
+      }else{
+        score[[i]] <- rnorm(Nr, mean = 12 + runif(1, min=-2, max = 2))
+      }
+
+    }
+    score <- do.call(c, score)
+    out$externalscore <- score
+  }
+
   return(out)
 }
 

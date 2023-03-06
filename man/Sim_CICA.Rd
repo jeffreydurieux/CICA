@@ -4,7 +4,16 @@
 \alias{Sim_CICA}
 \title{Simulate CICA data}
 \usage{
-Sim_CICA(Nr, Q, R, voxels, timepoints, E, overlap = NULL)
+Sim_CICA(
+  Nr,
+  Q,
+  R,
+  voxels,
+  timepoints,
+  E,
+  overlap = NULL,
+  externalscore = FALSE
+)
 }
 \arguments{
 \item{Nr}{number of subjects per cluster}
@@ -20,6 +29,8 @@ Sim_CICA(Nr, Q, R, voxels, timepoints, E, overlap = NULL)
 \item{E}{proportion of independent gaussian noise}
 
 \item{overlap}{amount of overlap between S across clusters. Smaller value means more overlap}
+
+\item{externalscore}{add simulated external score (default is FALSE)}
 }
 \value{
 a list with simulated CICA data
