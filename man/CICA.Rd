@@ -14,7 +14,7 @@ CICA(
   pseudoFac,
   rational = NULL,
   userGrid = NULL,
-  scalevalue = NULL,
+  scalevalue = 1000,
   center = TRUE,
   maxiter = 100,
   verbose = TRUE,

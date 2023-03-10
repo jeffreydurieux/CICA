@@ -41,7 +41,7 @@
 #' data('CICA_data', package = 'CICA')
 #' output <- CICA(DataList = CICA_data$X, RanStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
 #' summary(output)
-CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = NULL, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
+CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
 
