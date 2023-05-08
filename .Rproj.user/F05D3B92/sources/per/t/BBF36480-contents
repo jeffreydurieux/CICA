@@ -1,0 +1,28 @@
+outputAnalysis <- function(dat, output, N) {
+  
+  equalClus <- apply(psych::congruence(dat$U, output$U), 2, which.max)
+
+  # cluster recovery
+  ARI <- mclust::adjustedRandIndex(apply(dat$U, 1, which.max), apply(output$U, 1, which.max))
+  ARIF <- fclust::ARI.F(apply(dat$U, 1, which.max), output$U)
+  Ucon <- mean(apply(psych::congruence(dat$U, output$U), 1, max))
+  
+  # S matrices
+  Srcon <- sapply(seq_along(equalClus), function(i) mean(apply(abs(psych::congruence(dat$Sr[[i]], output$Sr[[equalClus[i]]])), 1, max)))
+  Scon <- mean(Srcon)
+  
+  # A matrices
+  Aicon <- c()
+  for (i in 1:N) {
+    Aircon <- sapply(seq_along(equalClus), function(j) mean(apply(abs(psych::congruence(dat$A[[i]][[j]], output$Air[[i]][[equalClus[j]]])), 1, max)))
+    Aicon <- append(Aicon, mean(Aircon))
+  }
+  Acon <- mean(Aicon)
+  
+  # percetage lowest loss
+  roundStarts <- round(output$LossStarts, 2)
+  gOptimum <- sum(roundStarts == min(roundStarts))/length(roundStarts)
+
+  
+  return(c(ARI, ARIF, Ucon, Scon, Acon, gOptimum))
+}

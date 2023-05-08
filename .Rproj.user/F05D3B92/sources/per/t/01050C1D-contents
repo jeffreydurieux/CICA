@@ -1,0 +1,28 @@
+setwd("C:/Users/ellen/Downloads/ResultsFCICA")
+
+library(ica)
+library(StatPerMeCo)
+library(NMFN)
+library(mclust)
+library(neuRosim)
+
+nClus <- c(2, 4)
+fuzziness <- c(0, 1)
+nComp <- c(5, 10)
+overlap <- c(0.540, 0.395, 0.230)
+noise <- c(0.05, 0.20, 0.40)
+
+Design <- expand.grid(nClus = nClus, fuzziness = fuzziness, nComp = nComp, overlap = overlap, noise = noise)
+
+totalCells <- nrow(Design)
+twoClusCells <- seq(from=3, to=72, by=2)
+fourClusCells <- seq(from=2, to=72, by=2)
+
+for (i in fourClusCells[]) {
+  Row <- i
+  myResult <- SimulationCell(Design = Design, RowOfDesign = Row, K = 10, N = 60, nStarts = 30)
+  
+  save(myResult, file = paste("myResult", "Row", Row, ".RData", sep=""))
+}
+
+

@@ -8,10 +8,11 @@ library(CICA)
 
 data('CICA_data', package = 'CICA')
 attach(CICA_data)
-object <- CICA(DataList = CICA_data$X, nComp = 5, nClus = 4, RanStarts = 1)
+#object <- CICA(DataList = CICA_data$X, nComp = 5, nClus = 4, RanStarts = 1)
 # multi cica
+set.seed(1)
 multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
-                       userGrid = NULL, RanStarts = 30, RatStarts = FALSE, pseudo = c(0.1, 0.2),  pseudoFac = 2, rational = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001)
+                       userGrid = NULL, RanStarts = 30, RatStarts = FALSE, pseudo = c(0.1, 0.2),  pseudoFac = 2, rational = NULL, scalevalue = 5000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001)
 
 
 # defining rational starts
@@ -30,6 +31,7 @@ ModSelOutput <- SequentialScree(multiple_output)
 plot(ModSelOutput)#does not work in windows? Somehow normal plot is called. Mac it works
 
 plot.ModSel(ModSelOutput)
+ModSelOutput
 
 
 

@@ -1,0 +1,32 @@
+
+SimulationCell <- function(Design, RowOfDesign, K = 10, N, nStarts) {
+  
+  
+  myResult <- matrix(NA, nrow = K, ncol = 6)
+  
+  nClus <- Design$nClus[RowOfDesign]
+  fuzziness <- Design$fuzziness[RowOfDesign]
+  nComp <- Design$nComp[RowOfDesign]
+  
+  
+  tmp <- proc.time()
+  for (k in 1:K) {
+    
+    cat("repetition data set: ", k, "\n")
+    set.seed((k + 1000)*RowOfDesign)
+    simData <- do.call( dataGeneration, Design[RowOfDesign, ] )
+    
+    runFCM1 <- FCM(DataList = simData$X, nStarts = nStarts, nComp = nComp, nClus = nClus, m = 1.1)
+    myResult[k, ] <- outputAnalysis(dat = simData, output = runFCM1, N = N)
+    
+    runFCM2 <- FCM(DataList = simData$X, nStarts = 1, nComp = nComp, nClus = nClus, m = (2 + fuzziness), rational = runFCM1$U)
+    
+    myResult[k, 1:5] <- outputAnalysis(dat = simData, output = runFCM2, N = N)[1:5]
+  }
+  
+  time <- proc.time() - tmp
+  print(time)
+  return(myResult)
+}
+
+

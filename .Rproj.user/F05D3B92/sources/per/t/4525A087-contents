@@ -1,0 +1,48 @@
+dataGeneration <- function(nClus, fuzziness, nComp, overlap, noise) {
+  
+  N <- 60
+  V <- 1000
+  T <- 100
+  R <- nClus
+  Q <- nComp
+  
+  # S matrices
+  Sbase <-  Smatrix2(voxels = V, comComp = Q) 
+  SrList <- lapply(1:R, function(i) Sr(Sbase = Sbase, voxels = V, comComp = Q, weight = overlap))
+  
+  
+  # subjects
+  
+  # less fuzzy
+  if (fuzziness == 0) {
+    U <- t(sapply(1:N, function(i) {
+      numb <- sample(c(runif(1, min=0.8, max=0.9), runif(1, min=0.1, max=0.2), runif(R-2, min=0.0, max=0.1)), size = R)
+      numb/sum(numb)
+    }))
+  }
+  # fuzzy
+  else {
+    U <- t(sapply(1:N, function(i) {
+      numb <- sample(c(runif(1, min=0.6, max=0.7), runif(1, min=0.3, max=0.4), runif(R-2, min=0.1, max=0.2)), size = R)
+      numb/sum(numb)
+    }))
+  }
+ 
+  A <- lapply(1:N, function(i) AList(nClus = R, time = T, comComp = Q))
+  Z <- lapply(1:N, function(i) Zi(nClus = R, AList = A[[i]], SList = SrList, memberships = U[i,]))
+  E <- lapply(1:N, function(i) matrix(rnorm(V*T), nrow = V, ncol = T))
+  
+  w <- sqrt(noise/(1-noise))
+  X <- lapply(1:N, function(i) Z[[i]] + w*E[[i]]*sqrt(sum(Z[[i]]^2)/sum(E[[i]]^2)))
+  
+  
+  # data set output
+  dat <- list()
+  dat$U <- U
+  dat$Sr <- SrList
+  dat$X <- X
+  dat$A <- A
+  dat$E <- E
+  
+  return(dat)
+}
