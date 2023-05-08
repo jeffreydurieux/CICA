@@ -36,7 +36,7 @@ CICA(
 
 \item{pseudoFac}{factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts}
 
-\item{userDef}{a user-defined starting seed, if NULL no userDef starting seed is used}
+\item{userDef}{a user-defined starting seed stored in a data.frame, if NULL no userDef starting partition is used}
 
 \item{userGrid}{user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters}
 
@@ -56,7 +56,10 @@ CICA(
 \item{Sr}{list of size \code{nClus}, containing cluster specific independent components}
 \item{Ais}{list of size \code{length(DataList)}, containing subject specific time courses}
 \item{Loss}{loss function value of the best start}
+\item{IndLoss}{a vector with containing the individual loss function values}
 \item{LossStarts}{loss function values of all starts}
+\item{Iterations}{Number of iterations}
+\item{starts}{dataframe with the used starting partitions}
 }
 \description{
 Main function to perform Clusterwise Independent Component Analysis

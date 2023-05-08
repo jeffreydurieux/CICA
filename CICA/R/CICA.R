@@ -20,7 +20,7 @@
 #' @param userGrid user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters
 #' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
-#' @param userDef a user-defined starting seed, if NULL no userDef starting seed is used
+#' @param userDef a user-defined starting seed stored in a data.frame, if NULL no userDef starting partition is used
 #' @param maxiter maximum number of iterations for each start
 #' @param verbose print loss information to console
 #' @param ctol tolerance value for convergence criterion
@@ -30,7 +30,10 @@
 #' \item{Sr}{list of size \code{nClus}, containing cluster specific independent components}
 #' \item{Ais}{list of size \code{length(DataList)}, containing subject specific time courses}
 #' \item{Loss}{loss function value of the best start}
+#' \item{IndLoss}{a vector with containing the individual loss function values}
 #' \item{LossStarts}{loss function values of all starts}
+#' \item{Iterations}{Number of iterations}
+#' \item{starts}{dataframe with the used starting partitions}
 #'
 #'
 #'
@@ -324,17 +327,20 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
         TempOutput$`1`$Sr <- ICAparams$Sr
         TempOutput$`1`$Loss <- tail(LossStarts, n = 1)
         TempOutput$`1`$iterations <- iter - 1
+        TempOutput$`1`$SSmin <- UpdatedPInfo$SSminVec
       }else if(st >= 2){
         TempOutput$`2`$P <- newclus
         TempOutput$`2`$Sr <- ICAparams$Sr
         TempOutput$`2`$Loss <- tail(LossStarts, n = 1)
         TempOutput$`2`$iterations <- iter - 1
+        TempOutput$`2`$SSmin <- UpdatedPInfo$SSminVec
 
         if(TempOutput$`2`$Loss <= TempOutput$`1`$Loss){
           TempOutput$`1`$P <- TempOutput$`2`$P
           TempOutput$`1`$Sr <- TempOutput$`2`$Sr
           TempOutput$`1`$Loss <- TempOutput$`2`$Loss
           TempOutput$`1`$iterations <- iter - 1
+          TempOutput$`1`$SSmin <- TempOutput$`2`$SSmin
         }
       }
 
@@ -360,6 +366,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
     output$Sr <- Sr
     output$Ais <- Ais
     output$Loss <- TempOutput$`1`$Loss
+    output$IndLoss <- TempOutput$`1`$SSmin
     output$LossStarts <- LossStarts
     output$iterations <- TempOutput$`1`$iterations
     output$starts <- startvecs
