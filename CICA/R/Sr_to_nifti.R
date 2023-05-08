@@ -4,6 +4,16 @@
 #' @param write if TRUE, NIfTI files are written to current working directory
 #' @param ... other arguments passed to RNifti::writeNifti
 #' @return a list with niftiImage files
+#'
+#' @examples
+#' \dontrun{
+#' nifs <- loadNIfTIs('<FolderPath>', toMatrix = T)
+#' outnif <- CICA(DataList = nifs, RanStarts = 2, nComp = 10, nClus = 2)
+#' test <- Sr_to_nifti(outnif,write = T, datatype = 'int16', version = 2)
+#' }
+#'
+#' @import RNifti
+#'
 #' @export
 #'
 Sr_to_nifti <- function(x, write = FALSE, ...){

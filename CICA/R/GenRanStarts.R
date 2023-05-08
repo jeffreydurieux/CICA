@@ -1,11 +1,11 @@
-#' Title
+#' Generate random starts
 #'
 #' @param RanStarts number of randomstarts to generate
 #' @param nClus     number of clusters
 #' @param nBlocks   number of objects
-#' @param ARIlim maximal value of adjusted Rand Index
+#' @param ARIlim    maximal value of adjusted Rand Index
 #' @param itmax     maximum number of iterations used to find suitable random starts
-#' @param verbose
+#' @param verbose   boolean that indicates whether the output should be printed on the console
 #'
 #' @return a list where the first element is a matrix with random starts, second element all pairwise ARIs
 #' #'
@@ -19,7 +19,7 @@ GenRanStarts <- function(RanStarts, nClus, nBlocks, ARIlim = 0.2,
   while(ncol(rs) != RanStarts & it < itmax){
     it <- it + 1
     candidate <- clusf(nBlocks = nBlocks, nClus = nClus)
-    if(all(abs(apply(rs, MARGIN = 2, mclust::adjustedRandIndex, y = candidate)) < ARIlim)){
+    if(all(abs(apply(rs, MARGIN = 2, adjustedRandIndex, y = candidate)) < ARIlim)){
       rs <- cbind(rs, candidate)
       colnames(rs) <- rep('RandomStart', times = ncol(rs))
     }

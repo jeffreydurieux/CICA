@@ -53,13 +53,26 @@ dataframe with (pseudo-) rational and dist object based on the pairwise modified
 Plot method for rstarts object
 }
 \examples{
-## Not run:
-data('CICA_data', package = 'CICA')
+\dontrun{
+CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
 rats <- FindRationalStarts(DataList = CICA_data$X, nComp = 5, nClus = 4,verbose = TRUE, pseudo = .2)
 plot(rats, type = 1, method = 'ward.D2')
 plot(rats, type = 2, method = 'ward.D2')
 plot(rats, type = 2, method = 'ward.D2', mdsdim = 3)
-## End(Not run)
+}
+
+
+\dontrun{
+CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
+Out_starts <- FindRationalStarts(DataList = CICA_data$X,nComp = 5,nClus = 4,scalevalue = 1000)
+plot(Out_starts)
+plot(Out_starts, type = 2)
+plot(Out_starts, type = 2,mdsdim = 3, method = 'ward.D2')
+}
+
+
 }
 \references{
 Durieux, J., & Wilderjans, T. F. (2019). Partitioning subjects based on high-dimensional fMRI data: comparison of several clustering methods and studying the influence of ICA data reduction in big data. Behaviormetrika, 46(2), 271-311.

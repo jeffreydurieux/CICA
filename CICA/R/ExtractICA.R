@@ -11,7 +11,7 @@ ExtractICA <- function(DataList,  nComp, svd = FALSE){
   #DataList <- lapply(DataList, FUN = scale, center = T, scale = T)
 
   if(svd == FALSE){
-    icaListCluster <- lapply(DataList, ica::icafast, nc = nComp)
+    icaListCluster <- lapply(DataList, icafast, nc = nComp)
     ICA_S <- lapply(icaListCluster, function(anom) anom$S)
     ListRes <- list("Sr" = ICA_S)
   }else{

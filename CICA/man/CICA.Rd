@@ -12,7 +12,7 @@ CICA(
   RatStarts = NULL,
   pseudo = NULL,
   pseudoFac,
-  rational = NULL,
+  userDef = NULL,
   userGrid = NULL,
   scalevalue = 1000,
   center = TRUE,
@@ -30,13 +30,13 @@ CICA(
 
 \item{RanStarts}{number of random starts}
 
-\item{RatStarts}{Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete')}
+\item{RatStarts}{Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete'). Use NULL to indicate that Rational starts should not be used.}
 
 \item{pseudo}{percentage value for perturbating rational starts to obtain pseudo rational starts}
 
 \item{pseudoFac}{factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts}
 
-\item{rational}{a rational starting seed, if NULL no rational starting seed is used}
+\item{userDef}{a user-defined starting seed, if NULL no userDef starting seed is used}
 
 \item{userGrid}{user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters}
 
@@ -62,9 +62,20 @@ CICA(
 Main function to perform Clusterwise Independent Component Analysis
 }
 \examples{
-data('CICA_data', package = 'CICA')
-output <- CICA(DataList = CICA_data$X, RanStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
-summary(output)
+\dontrun{
+CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
+
+multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
+userGrid = NULL, RanStarts = 30, RatStarts = NULL, pseudo = c(0.1, 0.2),
+pseudoFac = 2, userDef = NULL, scalevalue = 1000, center = TRUE,
+maxiter = 100, verbose = TRUE, ctol = .000001)
+
+summary(multiple_output$Q_5_R_4)
+
+plot(multiple_output$Q_5_R_4)
+}
+
 }
 \author{
 Jeffrey Durieux

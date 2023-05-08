@@ -8,9 +8,12 @@
 #' @param verbose boolean if TRUE progressbar is printed to the console
 #'
 #' @return \item{RVsS}{a square similarity matrix of \code{class} \code{\link{matrix}} or distance object of \code{class} \code{\link{dist}} containing the pairwise modified RV values}
-#' @export
-#' @examples data('CICA_data', package = 'CICA')
 #'
+#' @examples
+#'
+#' \dontrun{
+#' CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+#' E = 0.4, overlap = .25, externalscore = TRUE)
 #' #Compute single subject ICAs (nClus equals length(ExampleData))
 #' output <- CICA(DataList = CICA_data$X, nStarts = 1,
 #'                nComp = 5, nClus = 9, verbose = FALSE)
@@ -25,13 +28,17 @@
 #' # low dimensional visualisation using Classical Multidimensional Scaling
 #' mds <- cmdscale(RV)
 #' plot(mds)
+#' }
 #'
+#' @importFrom utils combn
+#'
+#' @export
 #'
 computeRVmat <- function(DataList = DataList, dist = TRUE, verbose = TRUE){
 
   N <- length(DataList)
 
-  comb <- t(utils::combn(1:N, 2))
+  comb <- t(combn(1:N, 2))
 
   if(verbose == TRUE){
     cat("Computing pairwise modified-RV statistics: \n")

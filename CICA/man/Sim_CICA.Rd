@@ -39,5 +39,14 @@ a list with simulated CICA data
 Simulate CICA data
 }
 \examples{
-Xe <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10, E = .2)
+\dontrun{
+
+#Use set.seed(1) to obtain the dataset used in the article "Clusterwise
+#Independent Component Analysis (CICA): an R package for clustering subjects
+#based on ICA patterns underlying three-way (brain) data"
+
+Xe <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
+}
+
 }

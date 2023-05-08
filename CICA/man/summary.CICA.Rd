@@ -21,7 +21,17 @@
 Summarize a CICA analysis
 }
 \examples{
-data('CICA_data', package = 'CICA')
-output <- CICA(DataList = CICA_data$X, nStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
-summary(output)
+\dontrun{
+CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
+
+multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
+userGrid = NULL, RanStarts = 30, RatStarts = NULL, pseudo = c(0.1, 0.2),
+pseudoFac = 2, userDef = NULL, scalevalue = 1000, center = TRUE,
+maxiter = 100, verbose = TRUE, ctol = .000001)
+
+summary(multiple_output$Q_5_R_4)
+}
+
+
 }

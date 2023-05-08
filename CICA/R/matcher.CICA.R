@@ -6,6 +6,23 @@
 #' @param ... other arguments
 #'
 #' @return out
+#'
+#' @examples
+#' \dontrun{
+#' CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+#' E = 0.4, overlap = .25, externalscore = TRUE)
+#'
+#' multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
+#' userGrid = NULL, RanStarts = 30, RatStarts = NULL, pseudo = c(0.1, 0.2),
+#' pseudoFac = 2, userDef = NULL, scalevalue = 1000, center = TRUE,
+#' maxiter = 100, verbose = TRUE, ctol = .000001)
+#'
+#' matcher(multiple_output$Q_5_R_4, reference = 1, RV = TRUE)
+#' }
+#'
+#' @importFrom multiway congru
+#' @import RNifti
+#'
 #' @export
 #'
 matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
@@ -22,7 +39,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
     for(i in 1:length(toSelect)){
 
       #con <- cor(x$Sr[[reference]], x$Sr[[ toSelect[i]]] )
-      con <- multiway::congru(x$Sr[[reference]], x$Sr[[ toSelect[i]]] )
+      con <- congru(x$Sr[[reference]], x$Sr[[ toSelect[i]]] )
       conList[[i]] <- con
       Cluster2 <- apply(abs(con) , MARGIN = 1, which.max)
       max <- apply(abs(con) , MARGIN = 1, max)
@@ -47,7 +64,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
 
     for(i in 1:lsr){
       #con <- cor(nif, x$Sr[[ i ]] )
-      con <- multiway::congru(nif, x$Sr[[ i ]] )
+      con <- congru(nif, x$Sr[[ i ]] )
 
       conList[[i]] <- con
       whichm <- apply(abs(con) , MARGIN = 1, which.max)
@@ -73,7 +90,7 @@ matcher.CICA <- function(x, reference = 1, RV = FALSE, ...){
 
     for(i in 1:lsr){
       con <- cor(reference, x$Sr[[ i ]] )
-      con <- multiway::congru(reference, x$Sr[[ i ]] )
+      con <- congru(reference, x$Sr[[ i ]] )
       conList[[i]] <- con
       whichm <- apply(abs(con) , MARGIN = 1, which.max)
       max <- apply(abs(con) , MARGIN = 1, max)

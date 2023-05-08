@@ -20,8 +20,10 @@ computeRVmat(DataList = DataList, dist = TRUE, verbose = TRUE)
 This function computes a NxN modified RV matrix
 }
 \examples{
-data('CICA_data', package = 'CICA')
 
+\dontrun{
+CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
 #Compute single subject ICAs (nClus equals length(ExampleData))
 output <- CICA(DataList = CICA_data$X, nStarts = 1,
                nComp = 5, nClus = 9, verbose = FALSE)
@@ -36,6 +38,6 @@ plot(hcl)
 # low dimensional visualisation using Classical Multidimensional Scaling
 mds <- cmdscale(RV)
 plot(mds)
-
+}
 
 }

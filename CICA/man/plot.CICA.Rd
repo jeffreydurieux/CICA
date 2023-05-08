@@ -19,3 +19,17 @@
 Plot method for CICA. This function shows the cluster specific
 independent components in an interactive viewer using the papayar package
 }
+\examples{
+\dontrun{
+CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+E = 0.4, overlap = .25, externalscore = TRUE)
+
+multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
+userGrid = NULL, RanStarts = 30, RatStarts = NULL, pseudo = c(0.1, 0.2),
+pseudoFac = 2, userDef = NULL, scalevalue = 1000, center = TRUE,
+maxiter = 100, verbose = TRUE, ctol = .000001)
+
+plot(multiple_output$Q_5_R_4, cluster = 2)
+}
+
+}

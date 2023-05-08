@@ -10,18 +10,21 @@
 #' @param verbose print output to console
 #'
 #' @return dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
-#' @export
+#'
 #'
 #' @examples
-#' ## Not run:
-#' data('CICA_data', package = 'CICA')
+#' \dontrun{
+#' CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+#' E = 0.4, overlap = .25, externalscore = TRUE)
 #' rats <- FindRationalStarts(DataList = CICA_data$X, nComp = 5, nClus = 4,verbose = TRUE, pseudo = .2)
 #' plot(rats, type = 1, method = 'ward.D2')
 #' plot(rats, type = 2, method = 'ward.D2')
 #' plot(rats, type = 2, method = 'ward.D2', mdsdim = 3)
-#' ## End(Not run)
+#' }
+#'
+#'
+#' @export
 #' @references Durieux, J., & Wilderjans, T. F. (2019). Partitioning subjects based on high-dimensional fMRI data: comparison of several clustering methods and studying the influence of ICA data reduction in big data. Behaviormetrika, 46(2), 271-311.
-
 #'
 FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalevalue = NULL,
                                center = TRUE, verbose = TRUE, pseudo = NULL, pseudoFac=NULL){
@@ -71,6 +74,10 @@ FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalev
 
       if(all(pseudo >= 0 & pseudo <=1) == FALSE){
         stop('pseudo should be a value between 0 and 1')
+      }
+
+      if(pseudoFac < 1){
+        stop('pseudoFac should be an integer larger or equal than 1')
       }
 
 

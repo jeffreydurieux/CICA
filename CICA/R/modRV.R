@@ -6,16 +6,18 @@
 #' @return A single value, indicating the similarity between the two input matrices
 #' @keywords internal
 #'
-#'@author Jeffrey Durieux
-#'@references Smilde AK, Kiers HAL, Bijlsma S, Rubingh CM, van Erk MJ (2009) Matrix correlations for high-dimensional data: the modified RV-coefficient. Bioinformatics 25(3):401–405
+#' @author Jeffrey Durieux
+#' @references Smilde AK, Kiers HAL, Bijlsma S, Rubingh CM, van Erk MJ (2009) Matrix correlations for high-dimensional data: the modified RV-coefficient. Bioinformatics 25(3):401–405
 #'
 #' @seealso \code{\link{computeRVmat}}
 #'
 #' @examples
+#' \dontrun{
 #' #X1 <- matrix(rnorm(1000), 10)
 #' #SVD <- svd(X1)
 #' #X2 <- SVD$u[,-5] %*% diag(SVD$d[-5]) %*% t(SVD$v[,-5])
 #' #modRV(X1,X2)
+#' }
 
 
 

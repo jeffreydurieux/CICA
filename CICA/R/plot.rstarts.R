@@ -5,6 +5,21 @@
 #' @param mdsdim 2 for two dimensional mds configuration, 3 for a three dimensional configuration
 #' @param nClus Number of clusters for rectangles in dendrogram, default NULL is based on number of clusters present in the object
 #' @param ... optional arguments passed to \code{hclust} function
+#'
+#' @examples
+#' \dontrun{
+#' CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+#' E = 0.4, overlap = .25, externalscore = TRUE)
+#' Out_starts <- FindRationalStarts(DataList = CICA_data$X,nComp = 5,nClus = 4,scalevalue = 1000)
+#' plot(Out_starts)
+#' plot(Out_starts, type = 2)
+#' plot(Out_starts, type = 2,mdsdim = 3, method = 'ward.D2')
+#' }
+#'
+#'
+#' @importFrom plotly plot_ly layout
+#' @importFrom magrittr %>%
+#' @importFrom stats hclust cutree rect.hclust cmdscale
 #' @export
 #'
 #'

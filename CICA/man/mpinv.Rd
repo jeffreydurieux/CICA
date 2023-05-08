@@ -7,10 +7,10 @@
 mpinv(X)
 }
 \arguments{
-\item{X}{}
+\item{X}{input matrix}
 }
 \value{
-mpinv
+mp Moore Penrose inverse of matrix X
 }
 \description{
 Moore Penrose inverse

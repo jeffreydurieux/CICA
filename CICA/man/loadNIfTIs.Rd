@@ -17,3 +17,10 @@ list object containing Voxel by Time course matrices
 \description{
 Load Nifti files from directory
 }
+\examples{
+\dontrun{
+nifs <- loadNIfTIs('<FolderPath>', toMatrix = T)
+outnif <- CICA(DataList = nifs, RanStarts = 2, nComp = 10, nClus = 2)
+}
+
+}

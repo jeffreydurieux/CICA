@@ -41,10 +41,10 @@ AdjustProb <- function(v , MaxElem)
       {
         for (tel in 1:abs(diff))
         {
-          tempcl = ceiling(stats::runif(1) * nElem)
+          tempcl = ceiling(runif(1) * nElem)
           while (v[tempcl] == 1)
           {
-            tempcl = ceiling(stats::runif(1) * nElem)
+            tempcl = ceiling(runif(1) * nElem)
           }
           v[tempcl] = v[tempcl] + 1
         }
@@ -61,10 +61,10 @@ AdjustProb <- function(v , MaxElem)
       {
         for (tel in 1:abs(diff))
         {
-          tempcl = ceiling(stats::runif(1) * nElem)
+          tempcl = ceiling(runif(1) * nElem)
           while (v[tempcl] == 1)
           {
-            tempcl = ceiling(stats::runif(1) * nElem)
+            tempcl = ceiling(runif(1) * nElem)
           }
           v[tempcl] = v[tempcl] - 1
         }

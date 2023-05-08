@@ -3,16 +3,16 @@
 #'@description Main function to perform Clusterwise Independent Component Analysis
 #'
 #' @import ica
-#' @import plotly
-#' @import papayar
+#' @importFrom plotly plot_ly
 #' @import RNifti
-#' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor
-#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor runif
+#' @importFrom utils setTxtProgressBar txtProgressBar combn tail
 #' @importFrom mclust adjustedRandIndex
+#' @importFrom methods hasArg
 #
 #' @param DataList a list of matrices
 #' @param RanStarts number of random starts
-#' @param RatStarts Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete')
+#' @param RatStarts Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete'). Use NULL to indicate that Rational starts should not be used.
 #' @param pseudo  percentage value for perturbating rational starts to obtain pseudo rational starts
 #' @param pseudoFac factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts
 #' @param nComp number or vector of ICA components per cluster
@@ -20,7 +20,7 @@
 #' @param userGrid user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters
 #' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
-#' @param rational a rational starting seed, if NULL no rational starting seed is used
+#' @param userDef a user-defined starting seed, if NULL no userDef starting seed is used
 #' @param maxiter maximum number of iterations for each start
 #' @param verbose print loss information to console
 #' @param ctol tolerance value for convergence criterion
@@ -32,16 +32,29 @@
 #' \item{Loss}{loss function value of the best start}
 #' \item{LossStarts}{loss function values of all starts}
 #'
-#' @export
 #'
-#'@author Jeffrey Durieux
+#'
+#' @author Jeffrey Durieux
 #'
 #'
 #' @examples
-#' data('CICA_data', package = 'CICA')
-#' output <- CICA(DataList = CICA_data$X, RanStarts = 3, nComp = 5, nClus = 4, verbose = FALSE)
-#' summary(output)
-CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, rational = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
+#' \dontrun{
+#' CICA_data <- Sim_CICA(Nr = 15, Q = 5, R = 4, voxels = 100, timepoints = 10,
+#' E = 0.4, overlap = .25, externalscore = TRUE)
+#'
+#' multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
+#' userGrid = NULL, RanStarts = 30, RatStarts = NULL, pseudo = c(0.1, 0.2),
+#' pseudoFac = 2, userDef = NULL, scalevalue = 1000, center = TRUE,
+#' maxiter = 100, verbose = TRUE, ctol = .000001)
+#'
+#' summary(multiple_output$Q_5_R_4)
+#'
+#' plot(multiple_output$Q_5_R_4)
+#' }
+#'
+#' @export
+#'
+CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, userDef = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
 
   #### input arguments check ####
 
@@ -67,7 +80,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
                  "median", "centroid", "ward.D2", 'all')
     i.meth <- pmatch(RatStarts, METHODS)
     if(is.na(i.meth)){
-      stop('Invalid RatStart argument')
+      stop('Invalid RatStarts argument')
     }
   }
 
@@ -160,27 +173,40 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
       nS <- 1
       startvecs <- matrix(rep(1,length(DataList)))
     }else{
-      ##### define rational and random starts ####
-      if(!is.null(rational)){
-        startvecs <- rational
+
+      startvecs <- NULL
+
+      ##### define userDef, rational and random starts ####
+      if(!is.null(userDef)){
+        startvecs <- userDef
+        colnames(startvecs)<-paste0("UserDefined",1:NCOL(userDef))
       }
 
       if(RanStarts != 0){
-        randomstarts <- CICA:::GenRanStarts(RanStarts = RanStarts,
+        randomstarts <- GenRanStarts(RanStarts = RanStarts,
                                             nClus = grid$nClus[ng],
                                             nBlocks = length(DataList),
                                             ARIlim = .2, itmax = 1000,
                                             verbose = verbose)
-        startvecs <- randomstarts$rs
+        if(is.null(startvecs)){
+          startvecs <- randomstarts$rs
+        }else{
+          startvecs <- cbind(startvecs, randomstarts$rs)
+        }
+
       }
       if(!is.null(RatStarts)){
-        rationalstarts <- CICA:::GenRatStarts(DataList = DataList,RatStarts = RatStarts, nComp = grid$nComp[ng],
+        rationalstarts <- GenRatStarts(DataList = DataList,RatStarts = RatStarts, nComp = grid$nComp[ng],
                                               nClus = grid$nClus[ng],
                                               scalevalue = scalevalue,
                                               center = center,verbose = verbose,
                                               pseudo = pseudo , pseudoFac = pseudoFac)
 
-        startvecs <- cbind(startvecs, rationalstarts$rat$rationalstarts)
+        if(is.null(startvecs)){
+          startvecs <- rationalstarts$rat$rationalstarts
+        }else{
+          startvecs <- cbind(startvecs, rationalstarts$rat$rationalstarts)
+        }
       }
 
 
@@ -197,15 +223,15 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
 
       #### step 1 initialize P ####
       newclus <- startvecs[ ,st]
-      # if(!is.null(rational)){
+      # if(!is.null(userDef)){
       #
-      #   if(class(rational) == 'rstarts'){
+      #   if(class(userDef) == 'rstarts'){
       #
-      #     if(st <= dim(rational$rationalstarts)[2]){
+      #     if(st <= dim(userDef$rationalstarts)[2]){
       #       if(verbose == TRUE){
-      #         cat('Type of start: Rational \n')
+      #         cat('Type of start: userDef \n')
       #       }
-      #       newclus <- rational$rationalstarts[,st]
+      #       newclus <- userDef$rationalstarts[,st]
       #     }else{
       #       if(verbose == TRUE){
       #         cat('Type of start: Random \n')
@@ -217,7 +243,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
       #       if(verbose == TRUE){
       #         cat('Type of start: Rational \n')
       #       }
-      #       newclus <- rational
+      #       newclus <- userDef
       #     }else{
       #       if(verbose == TRUE){
       #         cat('Type of start: Random \n')
@@ -275,6 +301,11 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
             if(iter == maxiter){
               cat('Maximum number of iterations reached \n')
               cat('\n')
+              if( Loss[iter-1] - Loss[iter] >= ctol ){
+                cat('Convergence not reached \n')
+                cat('\n')
+              }
+
             }else{
               cat('Convergence \n')
               cat('\n')
@@ -291,12 +322,12 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
       if(st == 1){
         TempOutput$`1`$P <- newclus
         TempOutput$`1`$Sr <- ICAparams$Sr
-        TempOutput$`1`$Loss <- utils::tail(LossStarts, n = 1)
+        TempOutput$`1`$Loss <- tail(LossStarts, n = 1)
         TempOutput$`1`$iterations <- iter - 1
       }else if(st >= 2){
         TempOutput$`2`$P <- newclus
         TempOutput$`2`$Sr <- ICAparams$Sr
-        TempOutput$`2`$Loss <- utils::tail(LossStarts, n = 1)
+        TempOutput$`2`$Loss <- tail(LossStarts, n = 1)
         TempOutput$`2`$iterations <- iter - 1
 
         if(TempOutput$`2`$Loss <= TempOutput$`1`$Loss){

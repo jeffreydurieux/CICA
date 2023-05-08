@@ -19,3 +19,11 @@ a list with niftiImage files
 \description{
 Convert Cluster specific independent components to NIFTI format
 }
+\examples{
+\dontrun{
+nifs <- loadNIfTIs('<FolderPath>', toMatrix = T)
+outnif <- CICA(DataList = nifs, RanStarts = 2, nComp = 10, nClus = 2)
+test <- Sr_to_nifti(outnif,write = T, datatype = 'int16', version = 2)
+}
+
+}

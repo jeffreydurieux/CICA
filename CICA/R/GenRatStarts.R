@@ -19,7 +19,7 @@ GenRatStarts <- function(DataList, RatStarts, nComp, nClus, scalevalue, center, 
                             scalevalue = scalevalue, center = center, verbose = verbose,
                             pseudo = pseudo, pseudoFac = pseudoFac)
 
-  comb <- t(utils::combn(1:ncol(rat$rationalstarts), 2))
+  comb <- t(combn(1:ncol(rat$rationalstarts), 2))
 
   rsARI <- matrix(data = NA, nrow = ncol(rat$rationalstarts) , ncol = ncol(rat$rationalstarts))
   rsi <- numeric()

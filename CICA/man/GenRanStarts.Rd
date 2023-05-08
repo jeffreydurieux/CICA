@@ -2,7 +2,7 @@
 % Please edit documentation in R/GenRanStarts.R
 \name{GenRanStarts}
 \alias{GenRanStarts}
-\title{Title}
+\title{Generate random starts}
 \usage{
 GenRanStarts(
   RanStarts,
@@ -24,12 +24,12 @@ GenRanStarts(
 
 \item{itmax}{maximum number of iterations used to find suitable random starts}
 
-\item{verbose}{}
+\item{verbose}{boolean that indicates whether the output should be printed on the console}
 }
 \value{
 a list where the first element is a matrix with random starts, second element all pairwise ARIs
 #'
 }
 \description{
-Title
+Generate random starts
 }

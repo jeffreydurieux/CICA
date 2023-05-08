@@ -1,8 +1,8 @@
 #' Moore Penrose inverse
 #'
-#' @param X
+#' @param X input matrix
 #'
-#' @return mpinv
+#' @return mp Moore Penrose inverse of matrix X
 #'
 
 mpinv <- function (X)

@@ -4,6 +4,14 @@
 #' @param toMatrix logical if TRUE nifti's are converted to matrices
 #'
 #' @return list object containing Voxel by Time course matrices
+#'
+#' @examples
+#' \dontrun{
+#' nifs <- loadNIfTIs('<FolderPath>', toMatrix = T)
+#' outnif <- CICA(DataList = nifs, RanStarts = 2, nComp = 10, nClus = 2)
+#' }
+#'
+#' @import RNifti
 #' @export
 #'
 
