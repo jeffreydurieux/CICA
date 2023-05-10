@@ -68,7 +68,7 @@ Sim_CICA <- function(Nr, Q, R, voxels, timepoints, E, overlap=NULL, externalscor
   out$P <- P
   out$X <- Xe
   out$Sr <- Sr
-  out$Air <- Air
+  out$Air <- unlist(Air, recursive = FALSE)
 
   if(!is.null(overlap)){
     out$RVs <- RVs
