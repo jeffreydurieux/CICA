@@ -25,18 +25,23 @@
 #'
 SequentialScree <- function(x){
 
-  if(!is(x,'MultipleCICA')){ #equivalent to if(class(x) != 'MultipleCICA'){
+  if(xor(is(x,'MultipleCICA'), !is.data.frame(x))){
     stop('Input object should be of class MultipleCICA')
   }
 
-  models <- names(x)
-  split <- strsplit(models, split = '_')
-  Q <- as.numeric(sapply(seq_along(split), function(anom) split[[anom]][2]))
-  R <- as.numeric(sapply(seq_along(split), function(anom) split[[anom]][4]))
+  if(is(x, 'MultipleCICA')){
+    models <- names(x)
+    split <- strsplit(models, split = '_')
+    Q <- as.numeric(sapply(seq_along(split), function(anom) split[[anom]][2]))
+    R <- as.numeric(sapply(seq_along(split), function(anom) split[[anom]][4]))
 
-  Loss <- sapply(seq_along(x), function(anom) x[[anom]]$Loss)
+    Loss <- sapply(seq_along(x), function(anom) x[[anom]]$Loss)
 
-  df <- data.frame(Q = Q, R = R, Loss = Loss)
+    df <- data.frame(Q = Q, R = R, Loss = Loss)
+  }else{
+    df <- x
+  }
+
 
   SR_rq <- function(Lq){
 

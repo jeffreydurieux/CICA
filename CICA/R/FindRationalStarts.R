@@ -32,7 +32,7 @@ FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalev
   METHODS <- c("ward.D", "single", "complete", "average", "mcquitty",
                "median", "centroid", "ward.D2", 'all')
   i.meth <- pmatch(RatStarts, METHODS)
-  if(is.na(i.meth)){
+  if(any(is.na(i.meth))){
     stop('Invalid RatStart argument')
   }
 
@@ -41,7 +41,7 @@ FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalev
                nClus = length(DataList), scalevalue = scalevalue, center = center, verbose = F)
   d <- computeRVmat(DataList = ICAs$Sr, dist = TRUE, verbose = verbose)
 
-  if(i.meth == 9){
+  if(any(i.meth == 9)){
     hcl0 <- hclust(d = d, method = 'ward.D')
     hcl1 <- hclust(d = d, method = 'ward.D2')
     hcl2 <- hclust(d = d, method = 'complete')
@@ -63,8 +63,12 @@ FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalev
     ps <- data.frame(p_ward, p_ward2, p_comp, p_single, p_average, p_mcquitty,
                      p_median, p_centroid)
   }else{
-    hcl <- hclust(d = d, method = METHODS[i.meth])
-    ps <- cutree(hcl, k = nClus)
+    ps <- matrix(data = NA, nrow = length(DataList), ncol = length(i.meth))
+    for(i in 1:length(i.meth)){
+      hcl <- hclust(d = d, method = METHODS[i.meth[i]])
+      ps[,i] <- cutree(hcl, k = nClus)
+
+    }
     ps <- data.frame(ps)
     colnames(ps) <- METHODS[i.meth]
   }
