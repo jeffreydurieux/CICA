@@ -29,6 +29,7 @@
 FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalevalue = NULL,
                                center = TRUE, verbose = TRUE, pseudo = NULL, pseudoFac=NULL){
 
+
   METHODS <- c("ward.D", "single", "complete", "average", "mcquitty",
                "median", "centroid", "ward.D2", 'all')
   i.meth <- pmatch(RatStarts, METHODS)
