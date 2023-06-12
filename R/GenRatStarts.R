@@ -19,9 +19,16 @@ GenRatStarts <- function(DataList, RatStarts, nComp, nClus, scalevalue, center, 
                             scalevalue = scalevalue, center = center, verbose = verbose,
                             pseudo = pseudo, pseudoFac = pseudoFac)
 
-  comb <- t(combn(1:ncol(rat$rationalstarts), 2))
+  if(NCOL(rat$rationalstarts)>1){
+    comb <- t(combn(1:NCOL(rat$rationalstarts), 2))
+  }else{
+    out <- list()
+    out$rat <- rat
+    out$ARIs <- matrix(NA,1,1)
+    return(out)
+  }
 
-  rsARI <- matrix(data = NA, nrow = ncol(rat$rationalstarts) , ncol = ncol(rat$rationalstarts))
+  rsARI <- matrix(data = NA, nrow = NCOL(rat$rationalstarts) , ncol = NCOL(rat$rationalstarts))
   rsi <- numeric()
 
   for(i in 1:nrow(comb)){

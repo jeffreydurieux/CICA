@@ -75,36 +75,36 @@ FindRationalStarts <- function(DataList, RatStarts = 'all', nComp, nClus, scalev
   }
 
 
-    if(!is.null(pseudo)){
+  if(!is.null(pseudo)){
 
-      if(all(pseudo >= 0 & pseudo <=1) == FALSE){
-        stop('pseudo should be a value between 0 and 1')
-      }
-
-      if(pseudoFac < 1){
-        stop('pseudoFac should be an integer larger or equal than 1')
-      }
-
-
-      #### add loop here to go over pseudo if it is a vector, see issue #4 github
-      Ppseudo_i <- list()
-      for(i in 1:pseudoFac){
-        Ppseudo_j <- list()
-        for(j in 1:length(pseudo)){
-          perbs <- matrix(data = NA, nrow = nrow(ps), ncol = ncol(ps))
-          for(k in 1:ncol(ps)){
-            perbs[,k] <- perturbation(ps[ ,k], percentage = pseudo[j])
-          }
-          colnames(perbs) <- paste(names(ps),'Pseudo',
-                                   rep(pseudo[j], times = ncol(ps)), 'Fac',i, sep = '')
-          Ppseudo_j[[j]] <- data.frame(perbs)
-        }
-        Ppseudo_i[[i]] <- data.frame(Ppseudo_j)
-
-      }
-      Ppseudo <- data.frame(Ppseudo_i)
-      ps <- cbind(ps, Ppseudo)
+    if(all(pseudo >= 0 & pseudo <=1) == FALSE){
+      stop('pseudo should be a value between 0 and 1')
     }
+
+    if(pseudoFac < 1){
+      stop('pseudoFac should be an integer larger or equal than 1')
+    }
+
+
+    #### add loop here to go over pseudo if it is a vector, see issue #4 github
+    Ppseudo_i <- list()
+    for(i in 1:pseudoFac){
+      Ppseudo_j <- list()
+      for(j in 1:length(pseudo)){
+        perbs <- matrix(data = NA, nrow = nrow(ps), ncol = ncol(ps))
+        for(k in 1:ncol(ps)){
+          perbs[,k] <- perturbation(ps[ ,k], percentage = pseudo[j])
+        }
+        colnames(perbs) <- paste(names(ps),'Pseudo',
+                                 rep(pseudo[j], times = ncol(ps)), 'Fac',i, sep = '')
+        Ppseudo_j[[j]] <- data.frame(perbs)
+      }
+      Ppseudo_i[[i]] <- data.frame(Ppseudo_j)
+
+    }
+    Ppseudo <- data.frame(Ppseudo_i)
+    ps <- cbind(ps, Ppseudo)
+  }
 
   # check if no empty clusters are present
   temp <- ps

@@ -18,7 +18,7 @@
 #' plot(ModSelOutput)
 #' }
 #'
-#' @importFrom plotly plot_ly
+#' @importFrom plotly plot_ly add_trace
 #' @importFrom methods is
 #'
 #' @export
@@ -44,9 +44,9 @@ plot.ModSel <- function(x,...){
               marker = list(symbol = 18, size = 10, color = 'darkgreen'), showlegend=F) %>%
     layout(
       #annotations = list(x = xsel, y = ysel,
-       #                       showarrow = TRUE, text = 'selected model',
-        #                      arrowhead = 6),
-           legend = list(title=list(text='Cluster')))
+      #                       showarrow = TRUE, text = 'selected model',
+      #                      arrowhead = 6),
+      legend = list(title=list(text='Cluster')))
 
 
 

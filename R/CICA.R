@@ -78,7 +78,18 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
     }
   }
 
+  # if(exists("pseudoFac")){
+  #   if(!is.null(pseudoFac)){
+  #     if(length(pseudoFac)>1){
+  #       stop("pseudoFac must be a unique value, not a vector")
+  #     }
+  #   }
+  # }
+
   if(!is.null(RatStarts)){
+    if(length(RatStarts)>1){
+      stop("Provide a unique method or use 'all' if you want to use all the available methods")
+    }
     METHODS <- c("ward.D", "single", "complete", "average", "mcquitty",
                  "median", "centroid", "ward.D2", 'all')
     i.meth <- pmatch(RatStarts, METHODS)
@@ -108,9 +119,19 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
   }
 
   if(!is.null(pseudo)){
-    if(all(pseudo >= 0 & pseudo <=1) == FALSE){
+
+    if(pseudo==0){#Pseudo==0 does not make sense. Transform it to 0
+      pseudo<-NULL
+      warning("0 is not a possible value for pseudo. Pseudo-rational starts are not computed.")
+    }
+
+    if(all(pseudo > 0 & pseudo <=1) == FALSE){
       stop('pseudo should be a value between 0 and 1')
     }
+  }
+
+  if(!is.null(userDef) && length(nClus)!=1){
+    stop("User-defined partitions are only allowed when a unique value for the number of clusters is provided")
   }
 
 
@@ -124,6 +145,16 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
     stop('Please check input DataList, dimensions are not equal over all matrices')
   }
 
+
+  if(!is.null(userDef)){
+    userDef<-as.matrix(userDef, nrow = NROW(DataList))
+    for (i in 1:NCOL(userDef)) {
+      udCluters<-length(unique(userDef[,i]))
+      if(udCluters!=nClus){
+        stop(paste0("The number of clusters provided in the user defined partition ", i," is not equal to the number of clusters requested"))
+      }
+    }
+  }
 
   #if( nComp > ncol(DataList[[1]]) ){
   #  stop('Number of components to extract is larger than the number of variables in each data matrix')
@@ -181,6 +212,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
 
       ##### define userDef, rational and random starts ####
       if(!is.null(userDef)){
+
         startvecs <- userDef
         colnames(startvecs)<-paste0("UserDefined",1:NCOL(userDef))
       }

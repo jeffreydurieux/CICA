@@ -35,13 +35,15 @@ SequentialScree <- function(x){
     Q <- as.numeric(sapply(seq_along(split), function(anom) split[[anom]][2]))
     R <- as.numeric(sapply(seq_along(split), function(anom) split[[anom]][4]))
 
+
+
     Loss <- sapply(seq_along(x), function(anom) x[[anom]]$Loss)
+
 
     df <- data.frame(Q = Q, R = R, Loss = Loss)
   }else{
     df <- x
   }
-
 
   SR_rq <- function(Lq){
 
