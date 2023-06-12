@@ -43,6 +43,11 @@ SequentialScree <- function(x){
     df <- data.frame(Q = Q, R = R, Loss = Loss)
   }else{
     df <- x
+    nam <- colnames(df)
+    if(nam[1] != "Q" & nam[2] != "R"){
+      stop('Supplied data.frame with complexities and loss function values are not named correctly.
+      Columnames for components and clusters should be named "Q" and "R" respectively')
+    }
   }
 
   SR_rq <- function(Lq){
@@ -78,21 +83,60 @@ SequentialScree <- function(x){
     return(Screes)
   }
 
+  
+  # both Q and R
   Qu <- unique(df$Q)
-  Screes <- SR_rq( df[df$Q==Qu[1], ]$Loss )
-  for(i in 2:length(Qu)){
-    Screes <- rbind(Screes, SR_rq(df[df$Q==Qu[i], ]$Loss ))
-  }
-
-  ColMeanScrees <- colMeans(Screes, na.rm = TRUE)
-  Rid <- which.max(ColMeanScrees)
   Ru <- unique(df$R)
-  Rselect <- Ru[Rid]
-
-  ScreeConditionalonR <- SR_qR(df[df$R==Rselect,]$Loss)
-  Qid <- which.max(ScreeConditionalonR)
-  Qselect <- Qu[Qid]
-
+  if(length(Qu) > 3 & length(Ru) >3){
+    Screes <- SR_rq( df[df$Q==Qu[1], ]$Loss )
+    for(i in 2:length(Qu)){
+      Screes <- rbind(Screes, SR_rq(df[df$Q==Qu[i], ]$Loss ))
+    }
+    
+    ColMeanScrees <- colMeans(Screes, na.rm = TRUE)
+    Rid <- which.max(ColMeanScrees)
+    
+    Rselect <- Ru[Rid]
+    
+    ScreeConditionalonR <- SR_qR(df[df$R==Rselect,]$Loss)
+    Qid <- which.max(ScreeConditionalonR)
+    Qselect <- Qu[Qid]
+  }else if(length(Qu) > 3){ # only Q
+    
+    Screes <- numeric()
+    Lq <- df$Loss
+    for(i in 1:length(Lq)){
+      if(i == 1){
+        Screes[i] <- NA
+      }
+      else if(i == length(Lq) ){
+        Screes[i] <- NA
+      }else{
+        Screes[i] <- (Lq[i-1] - Lq[i]) / (Lq[i] - Lq[i+1])
+      }
+    }
+    Qselect <- df$Q[which.max(Screes)]
+    Rselect <- NULL
+  }else if(length(Ru) > 3){
+    Screes <- numeric()
+    Lq <- df$Loss
+    for(i in 1:length(Lq)){
+      if(i == 1){
+        Screes[i] <- NA
+      }
+      else if(i == length(Lq) ){
+        Screes[i] <- NA
+      }else{
+        Screes[i] <- (Lq[i-1] - Lq[i]) / (Lq[i] - Lq[i+1])
+      }
+    }
+    Rselect <- df$R[which.max(Screes)]
+    Qselect <- NULL
+  }else{
+    stop('Not enough datapoints to compute scree test values, consider taking a larger number of components and/or clusters')
+  }
+  
+  
 
   out <- list()
   out$optimalQ <- Qselect

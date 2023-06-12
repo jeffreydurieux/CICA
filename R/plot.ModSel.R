@@ -30,24 +30,41 @@ plot.ModSel <- function(x,...){
     stop('Input object is not of class ModSel')
   }
 
-  if(length(x$optimalQ)==0){
+  if(length(x$optimalQ)==0 & length(x$optimalR)==0){
     stop("Scree values were not computed. Check if you provided at least 3 values for the nComp input argument of CICA")
   }
 
-  xsel <- x$optimalQ
-  rsel <- x$optimalR
-  ysel <- x$df[which(x$df$Q == xsel & x$df$R == rsel),]$Loss
-
-  plot_ly(data = x$df, x = ~Q, y=~Loss, color = ~as.factor(R), mode='lines+markers',
-          type = 'scatter') %>%
-    add_trace(x = ~xsel, y = ~ysel,
-              marker = list(symbol = 18, size = 10, color = 'darkgreen'), showlegend=F) %>%
-    layout(
-      #annotations = list(x = xsel, y = ysel,
-      #                       showarrow = TRUE, text = 'selected model',
-      #                      arrowhead = 6),
-      legend = list(title=list(text='Cluster')))
-
+  if(length(x$optimalQ)==1 & length(x$optimalR)==1){
+    xsel <- x$optimalQ
+    rsel <- x$optimalR
+    ysel <- x$df[which(x$df$Q == xsel & x$df$R == rsel),]$Loss
+    
+    plot_ly(data = x$df, x = ~Q, y=~Loss, color = ~as.factor(R), mode='lines+markers',
+            type = 'scatter') %>%
+      add_trace(x = ~xsel, y = ~ysel,
+                marker = list(symbol = 18, size = 10, color = 'darkgreen'), showlegend=F) %>%
+      layout(
+        #annotations = list(x = xsel, y = ysel,
+        #                       showarrow = TRUE, text = 'selected model',
+        #                      arrowhead = 6),
+        legend = list(title=list(text='Cluster')))
+    
+  }else if(length(x$optimalQ)==1 & length(x$optimalR)==0){
+    xsel <- x$optimalQ
+    ysel <- x$df[which(x$df$Q == xsel),]$Loss
+    plot_ly(data = x$df, x = ~Q, y=~Loss, mode='lines+markers',
+            type = 'scatter') %>%
+      add_trace(x = ~xsel, y = ~ysel,
+                marker = list(symbol = 18, size = 10, color = 'darkgreen'), showlegend=F) 
+  }else if(length(x$optimalQ)==0 & length(x$optimalR)==1){
+    xsel <- x$optimalR
+    ysel <- x$df[which(x$df$R == xsel),]$Loss
+    plot_ly(data = x$df, x = ~R, y=~Loss, mode='lines+markers',
+            type = 'scatter') %>%
+      add_trace(x = ~xsel, y = ~ysel,
+                marker = list(symbol = 18, size = 10, color = 'darkgreen'), showlegend=F)
+  }
+  
 
 
 }
