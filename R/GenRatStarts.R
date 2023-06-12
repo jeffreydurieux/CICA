@@ -37,9 +37,18 @@ GenRatStarts <- function(DataList, RatStarts, nComp, nClus, scalevalue, center, 
     res <- c(comb[i , ] , rsi)
     rsARI[res[1]  , res[2] ] <- res[3]
   }
-
-  rsARI[lower.tri(rsARI)] = t(rsARI)[lower.tri(rsARI)]
-
+rsARI
+  idxdublicate <- which(rsARI == 1, arr.ind = TRUE)
+  if(nrow(idxdublicate != 0)){
+    for(i in 1:nrow(idxdublicate)){
+      rat$rationalstarts[,idxdublicate[i,2]] <- CICA:::clusf(nBlocks = length(DataList), nClus = nClus) 
+      colnames(rat$rationalstarts)[idxdublicate[i,2]] <- 'ReplacedRandom'
+    }  
+  }
+  
+  
+  #rsARI[lower.tri(rsARI)] = t(rsARI)[lower.tri(rsARI)]
+  
   out <- list()
   out$rat <- rat
   out$ARIs <- rsARI
