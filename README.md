@@ -24,3 +24,5 @@ This version contains:
     -   v0.2.1: Update of example data. Added a single example data set from the simulation design of [Durieux & Wilderjans (2019).](https://link.springer.com/article/10.1007/s41237-019-00086-4) It contains 60 subjects and original cluster specific components and the true simulated clustering is added.
 
 -   R v0.3.0 CICA version with multiple CICA models
+
+-   R v1.0.0 CICA version with all working functionalities, this will be a version that also be submitted to CRAN 
