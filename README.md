@@ -25,4 +25,4 @@ This version contains:
 
 -   R v0.3.0 CICA version with multiple CICA models
 
--   R v1.0.0 CICA version with all working functionalities, this will be a version that also be submitted to CRAN 
+-   R v1.0.0 CICA version with all working functionalities. This version is also available on CRAN. This package version includes the papayar archived files that were made by John Muschelli.

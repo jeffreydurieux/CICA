@@ -18,7 +18,8 @@ CICA(
   center = TRUE,
   maxiter = 100,
   verbose = TRUE,
-  ctol = 1e-06
+  ctol = 1e-06,
+  checks = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ CICA(
 \item{verbose}{print loss information to console}
 
 \item{ctol}{tolerance value for convergence criterion}
+
+\item{checks}{boolean parameter that indicates whether the input checks should be run (TRUE) or not (FALSE).}
 }
 \value{
 \code{CICA} returns an object of \code{\link{class}} "CICA". It contains the estimated clustering, cluster specific component matrices and subject specific time course matrices
@@ -56,6 +59,7 @@ CICA(
 \item{Sr}{list of size \code{nClus}, containing cluster specific independent components}
 \item{Ais}{list of size \code{length(DataList)}, containing subject specific time courses}
 \item{Loss}{loss function value of the best start}
+\item{FinalLossDiff}{value of the loss difference between the last two iterations of the algorithm.}
 \item{IndLoss}{a vector with containing the individual loss function values}
 \item{LossStarts}{loss function values of all starts}
 \item{Iterations}{Number of iterations}

@@ -2,7 +2,7 @@ Package: CICA
 Type: Package
 Title: Clusterwise Independent Component Analysis
 Version: 1.0.0
-Date: 2023-04-19
+Date: 2023-06-27
 Depends: ica, RNifti, R (>= 2.10)
 Imports: mclust, plotly, multiway, methods, magrittr, neurobase,
         oro.nifti, servr, htmltools
@@ -12,7 +12,7 @@ Description: Clustering multi-subject resting state functional Magnetic Resonanc
 License: GPL (>=3)
 Encoding: UTF-8
 RoxygenNote: 7.2.0
-URL: https://hdl.handle.net/1887/35077,
+URL: https://www.sciencedirect.com/science/article/pii/S0165027022002448,
         https://github.com/jeffreydurieux/CICA
 NeedsCompilation: no
-Packaged: 2023-06-06 13:39:32 UTC; prueba
+Packaged: 2023-06-27 09:56:42 UTC; prueba

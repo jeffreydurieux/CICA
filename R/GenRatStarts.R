@@ -41,14 +41,14 @@ rsARI
   idxdublicate <- which(rsARI == 1, arr.ind = TRUE)
   if(nrow(idxdublicate != 0)){
     for(i in 1:nrow(idxdublicate)){
-      rat$rationalstarts[,idxdublicate[i,2]] <- CICA:::clusf(nBlocks = length(DataList), nClus = nClus) 
+      rat$rationalstarts[,idxdublicate[i,2]] <- clusf(nBlocks = length(DataList), nClus = nClus)
       colnames(rat$rationalstarts)[idxdublicate[i,2]] <- 'ReplacedRandom'
-    }  
+    }
   }
-  
-  
+
+
   #rsARI[lower.tri(rsARI)] = t(rsARI)[lower.tri(rsARI)]
-  
+
   out <- list()
   out$rat <- rat
   out$ARIs <- rsARI

@@ -24,12 +24,14 @@
 #' @param maxiter maximum number of iterations for each start
 #' @param verbose print loss information to console
 #' @param ctol tolerance value for convergence criterion
+#' @param checks boolean parameter that indicates whether the input checks should be run (TRUE) or not (FALSE).
 #'
 #' @return \code{CICA} returns an object of \code{\link{class}} "CICA". It contains the estimated clustering, cluster specific component matrices and subject specific time course matrices
 #' \item{P}{partitioning vector of size \code{length(DataList)}}
 #' \item{Sr}{list of size \code{nClus}, containing cluster specific independent components}
 #' \item{Ais}{list of size \code{length(DataList)}, containing subject specific time courses}
 #' \item{Loss}{loss function value of the best start}
+#' \item{FinalLossDiff}{value of the loss difference between the last two iterations of the algorithm.}
 #' \item{IndLoss}{a vector with containing the individual loss function values}
 #' \item{LossStarts}{loss function values of all starts}
 #' \item{Iterations}{Number of iterations}
@@ -57,11 +59,19 @@
 #'
 #' @export
 #'
-CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, userDef = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001){
+CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, userDef = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001, checks = TRUE){
 
   #### input arguments check ####
-
+  
+  if(is.null(names(DataList))){
+    filenames <- 1:length(DataList)
+  }else{
+    filenames <- names(DataList)
+  }
+  
   # Feasible randomstart number check (limit is 10% of Stirling number of the 2nd kind)
+  if(checks==TRUE){
+
   if(RanStarts > 1){
     m <- 0
     minClus <- min(nClus)
@@ -99,11 +109,6 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
   }
 
 
-  if(is.null(names(DataList))){
-    filenames <- 1:length(DataList)
-  }else{
-    filenames <- names(DataList)
-  }
 
   if(is.null(userGrid)){
     if(hasArg(nComp) == FALSE){
@@ -120,7 +125,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
 
   if(!is.null(pseudo)){
 
-    if(pseudo==0){#Pseudo==0 does not make sense. Transform it to 0
+    if(any(pseudo==0)){#Pseudo==0 does not make sense. Transform it to 0
       pseudo<-NULL
       warning("0 is not a possible value for pseudo. Pseudo-rational starts are not computed.")
     }
@@ -160,6 +165,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
   #  stop('Number of components to extract is larger than the number of variables in each data matrix')
   #}
 
+  }#end checking input arguments
 
   #### Preprocessing ####
 
@@ -201,6 +207,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
   for(ng in 1:nrow(grid)){
 
     LossStarts <- numeric()
+    FinalLossDiff <- numeric()
     TempOutput <- list()
 
     if(grid$nClus[ng]==1){
@@ -352,18 +359,21 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
       }# end repeat
 
       LossStarts[st] <- Loss[iter]
+      FinalLossDiff[st] <- Loss[iter-1] - Loss[iter]
 
       # procedure to only save current best start on first position of TempOutput
       if(st == 1){
         TempOutput$`1`$P <- newclus
         TempOutput$`1`$Sr <- ICAparams$Sr
         TempOutput$`1`$Loss <- tail(LossStarts, n = 1)
+        TempOutput$`1`$FinalLossDiff <- tail(FinalLossDiff, n = 1)
         TempOutput$`1`$iterations <- iter - 1
         TempOutput$`1`$SSmin <- UpdatedPInfo$SSminVec
       }else if(st >= 2){
         TempOutput$`2`$P <- newclus
         TempOutput$`2`$Sr <- ICAparams$Sr
         TempOutput$`2`$Loss <- tail(LossStarts, n = 1)
+        TempOutput$`2`$FinalLossDiff <- tail(FinalLossDiff, n = 1)
         TempOutput$`2`$iterations <- iter - 1
         TempOutput$`2`$SSmin <- UpdatedPInfo$SSminVec
 
@@ -371,6 +381,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
           TempOutput$`1`$P <- TempOutput$`2`$P
           TempOutput$`1`$Sr <- TempOutput$`2`$Sr
           TempOutput$`1`$Loss <- TempOutput$`2`$Loss
+          TempOutput$`1`$FinalLossDiff <-TempOutput$`2`$FinalLossDiff
           TempOutput$`1`$iterations <- iter - 1
           TempOutput$`1`$SSmin <- TempOutput$`2`$SSmin
         }
@@ -398,6 +409,7 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
     output$Sr <- Sr
     output$Ais <- Ais
     output$Loss <- TempOutput$`1`$Loss
+    output$FinalLossDiff <- TempOutput$`1`$FinalLossDiff
     output$IndLoss <- TempOutput$`1`$SSmin
     output$LossStarts <- LossStarts
     output$iterations <- TempOutput$`1`$iterations
