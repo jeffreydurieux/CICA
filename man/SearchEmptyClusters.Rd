@@ -7,11 +7,11 @@
 SearchEmptyClusters(nClus, newcluster, SSminVec = NULL)
 }
 \arguments{
+\item{nClus}{number of clusters}
+
 \item{newcluster}{newly updated clustering vector P}
 
-\item{oldcluster}{previous clustering vector P}
-
-\item{SSminvec}{loss function values per data block}
+\item{SSminVec}{loss function values per data block}
 }
 \value{
 a numeric vector indicating the new partitioning vector without empty clusters

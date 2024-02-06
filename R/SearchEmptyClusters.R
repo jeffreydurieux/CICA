@@ -1,8 +1,8 @@
 #' Search for empty clusters
 #'@description Internal function for CICA package
-#' @param oldcluster previous clustering vector P
+#' @param nClus number of clusters
 #' @param newcluster newly updated clustering vector P
-#' @param SSminvec loss function values per data block
+#' @param SSminVec loss function values per data block
 #'
 #' @keywords internal
 #' @return a numeric vector indicating the new partitioning vector without empty clusters
