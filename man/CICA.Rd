@@ -8,6 +8,7 @@ CICA(
   DataList,
   nComp,
   nClus,
+  method = "fastICA",
   RanStarts,
   RatStarts = NULL,
   pseudo = NULL,
@@ -29,9 +30,11 @@ CICA(
 
 \item{nClus}{number or vector of clusters}
 
+\item{method}{Component method, default is \code{fastICA}. \code{SCA} for Simultaneous Component Analysis (SCA-p version, no rotation)}
+
 \item{RanStarts}{number of random starts}
 
-\item{RatStarts}{Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete'). Use NULL to indicate that Rational starts should not be used.}
+\item{RatStarts}{Generate rational starts. Either 'all' or a specific linkage method name (e.g., 'complete'). Use NULL to indicate that Rational starts should not be used.}
 
 \item{pseudo}{percentage value for perturbating rational starts to obtain pseudo rational starts}
 

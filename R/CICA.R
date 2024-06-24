@@ -12,11 +12,12 @@
 #
 #' @param DataList a list of matrices
 #' @param RanStarts number of random starts
-#' @param RatStarts Generate rational starts. Eiter 'all' or a specific linkage method name (e.g., 'complete'). Use NULL to indicate that Rational starts should not be used.
+#' @param RatStarts Generate rational starts. Either 'all' or a specific linkage method name (e.g., 'complete'). Use NULL to indicate that Rational starts should not be used.
 #' @param pseudo  percentage value for perturbating rational starts to obtain pseudo rational starts
 #' @param pseudoFac factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts
 #' @param nComp number or vector of ICA components per cluster
 #' @param nClus number or vector of clusters
+#' @param method Component method, default is \code{fastICA}. \code{SCA} for Simultaneous Component Analysis (SCA-p version, no rotation)
 #' @param userGrid user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters
 #' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
@@ -59,7 +60,7 @@
 #'
 #' @export
 #'
-CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, userDef = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001, checks = TRUE){
+CICA <- function(DataList, nComp, nClus, method = 'fastICA', RanStarts, RatStarts=NULL, pseudo=NULL, pseudoFac, userDef = NULL,  userGrid = NULL, scalevalue = 1000, center = TRUE, maxiter = 100, verbose = TRUE, ctol = .000001, checks = TRUE){
 
   #### input arguments check ####
   
@@ -161,6 +162,10 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
     }
   }
 
+  if (!(method %in% c('fastICA','SCA'))){
+    stop('Provided method is not fastICA or SCA')
+  }  
+    
   #if( nComp > ncol(DataList[[1]]) ){
   #  stop('Number of components to extract is larger than the number of variables in each data matrix')
   #}
@@ -182,6 +187,18 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
 
   nBlocks <- length(DataList)
 
+  
+  # if SCA is used: first compute cov
+  if(method == 'SCA'){
+    groups <- rep(1:nBlocks, each = (nBlocks*ncol(DataList[[1]]))/(nBlocks))
+    indexList <- split(1:(nBlocks*ncol(DataList[[1]])), groups)
+    
+    XsL <- ConcData(DataList, rep(1, length(CICA_data$P)))
+    XsL <- XsL[[1]]
+    covL <- Rfast::cova(XsL, large = TRUE)
+  }
+  
+  
   ##### multiple models part ########
   if(!is.null(userGrid) ){
     if(!is.data.frame(userGrid)){
@@ -306,8 +323,14 @@ CICA <- function(DataList, nComp, nClus, RanStarts, RatStarts=NULL, pseudo=NULL,
         SortedDataList <- ConcData(DataList = DataList, ClusVec = newclus)
 
         #### Step 2 extract group ICA parameters (only Sr is necessary ####
-
-        ICAparams <- ExtractICA(DataList = SortedDataList, nComp = grid$nComp[ng])
+        if(method == 'SCA'){
+          idl <- lapply(seq_along(1:nClus), function(i) c(indexList[newclus==i]))
+          idl <- lapply(seq_along(idl), function(i) unlist(idl[[i]]))
+        }else{
+          covL <- NULL
+          idl <- NULL
+        }
+        ICAparams <- ExtractICA(DataList = SortedDataList, nComp = grid$nComp[ng], method, covL, indexList = idl)
 
         #### Step 3 update P ####
         UpdatedPInfo <- Reclus(DataList = DataList, SrList = ICAparams$Sr)
