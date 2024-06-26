@@ -1,3 +1,6 @@
+#'@description
+#'Two step clustering for finding rational start partitions
+#'
 #'
 #' @param DataList a list of matrices
 #' @param RatStarts type of rational start. 'all' computes all types of hclust methods

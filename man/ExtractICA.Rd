@@ -4,7 +4,7 @@
 \alias{ExtractICA}
 \title{Extract Group ICA parameters}
 \usage{
-ExtractICA(DataList, nComp, method = "fastICA")
+ExtractICA(DataList, nComp, method = "fastICA", covL = NULL, indexList = NULL)
 }
 \arguments{
 \item{DataList}{a list object to perform Group ICAs on}

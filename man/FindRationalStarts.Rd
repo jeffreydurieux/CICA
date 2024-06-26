@@ -50,7 +50,7 @@ FindRationalStarts(
 dataframe with (pseudo-) rational and dist object based on the pairwise modified RV values
 }
 \description{
-Plot method for rstarts object
+Two step clustering for finding rational start partitions
 }
 \examples{
 \dontrun{
