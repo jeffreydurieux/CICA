@@ -1,9 +1,9 @@
 Package: CICA
 Type: Package
 Title: Clusterwise Independent Component Analysis
-Version: 1.0.2
+Version: 1.1.0
 Date: 2024-02-05
-Depends: ica, RNifti, R (>= 2.10)
+Depends: ica, RNifti, Rfast, R (>= 4.3)
 Imports: mclust, plotly, multiway, methods, magrittr, neurobase,
         oro.nifti, servr, htmltools
 Author: Jeffrey Durieux [aut, cre], Tom Wilderjans [aut], Juan Claramunt Gonzalez [ctb]
@@ -11,7 +11,7 @@ Maintainer: Jeffrey Durieux <durieux.jeffrey@gmail.com>
 Description: Clustering multi-subject resting state functional Magnetic Resonance Imaging data. This methods enables the clustering of subjects based on multi-subject resting state functional Magnetic Resonance Imaging data. Objects are clustered based on similarities and differences in cluster-specific estimated components obtained by Independent Component Analysis.
 License: GPL (>=3)
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 URL: https://www.sciencedirect.com/science/article/pii/S0165027022002448,
         https://github.com/jeffreydurieux/CICA
 NeedsCompilation: no

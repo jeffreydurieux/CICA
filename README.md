@@ -26,3 +26,5 @@ This version contains:
 -   R v0.3.0 CICA version with multiple CICA models
 
 -   R v1.0.0 CICA version with all working functionalities. This version is also available on CRAN. This package version includes the papayar archived files that were made by John Muschelli.
+
+-   R v1.1.0 CICA version with a fast EVD based estimation procedure. This results in an equal (or similar) clustering. Use the final clustering to seed the CICA (using method = 'fastICA') to extract independent components. 
