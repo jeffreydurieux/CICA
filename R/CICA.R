@@ -193,7 +193,7 @@ CICA <- function(DataList, nComp, nClus, method = 'fastICA', RanStarts, RatStart
     groups <- rep(1:nBlocks, each = (nBlocks*ncol(DataList[[1]]))/(nBlocks))
     indexList <- split(1:(nBlocks*ncol(DataList[[1]])), groups)
     
-    XsL <- ConcData(DataList, rep(1, length(CICA_data$P)))
+    XsL <- ConcData(DataList, rep(1, length(DataList)))
     XsL <- XsL[[1]]
     covL <- Rfast::cova(XsL, large = TRUE)
   }
