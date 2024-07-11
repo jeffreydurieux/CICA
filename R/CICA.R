@@ -5,6 +5,7 @@
 #' @import ica
 #' @importFrom plotly plot_ly
 #' @import RNifti
+#' @importFrom Rfast eigen.sym cova
 #' @importFrom stats as.dist cutree hclust rect.hclust cmdscale cor runif
 #' @importFrom utils setTxtProgressBar txtProgressBar combn tail
 #' @importFrom mclust adjustedRandIndex
@@ -17,7 +18,7 @@
 #' @param pseudoFac factor to multiply the number of rational starts (7 in total) to obtain pseudorational starts
 #' @param nComp number or vector of ICA components per cluster
 #' @param nClus number or vector of clusters
-#' @param method Component method, default is \code{fastICA}. \code{SCA} for Simultaneous Component Analysis (SCA-p version, no rotation)
+#' @param method Component method, default is \code{fastICA}. \code{EVD} for a fast eigen value based estimation
 #' @param userGrid user supplied data.frame for multiple model CICA. First column are the requested components. Second column are the requested clusters
 #' @param scalevalue desired sum of squares of the block scaling procedure
 #' @param center mean center matrices
@@ -49,9 +50,9 @@
 #' E = 0.4, overlap = .25, externalscore = TRUE)
 #'
 #' multiple_output = CICA(DataList = CICA_data$X, nComp = 2:6, nClus = 1:5,
-#' userGrid = NULL, RanStarts = 30, RatStarts = NULL, pseudo = c(0.1, 0.2),
-#' pseudoFac = 2, userDef = NULL, scalevalue = 1000, center = TRUE,
-#' maxiter = 100, verbose = TRUE, ctol = .000001)
+#' method = 'fastICA',userGrid = NULL, RanStarts = 30, RatStarts = NULL, 
+#' pseudo = c(0.1, 0.2),pseudoFac = 2, userDef = NULL, scalevalue = 1000, 
+#' center = TRUE,maxiter = 100, verbose = TRUE, ctol = .000001)
 #'
 #' summary(multiple_output$Q_5_R_4)
 #'
@@ -162,8 +163,8 @@ CICA <- function(DataList, nComp, nClus, method = 'fastICA', RanStarts, RatStart
     }
   }
 
-  if (!(method %in% c('fastICA','SCA'))){
-    stop('Provided method is not fastICA or SCA')
+  if (!(method %in% c('fastICA','EVD'))){
+    stop('Provided method is not fastICA or EVD')
   }  
     
   #if( nComp > ncol(DataList[[1]]) ){
@@ -189,13 +190,13 @@ CICA <- function(DataList, nComp, nClus, method = 'fastICA', RanStarts, RatStart
 
   
   # if SCA is used: first compute cov
-  if(method == 'SCA'){
+  if(method == 'EVD'){
     groups <- rep(1:nBlocks, each = (nBlocks*ncol(DataList[[1]]))/(nBlocks))
     indexList <- split(1:(nBlocks*ncol(DataList[[1]])), groups)
     
     XsL <- ConcData(DataList, rep(1, length(DataList)))
     XsL <- XsL[[1]]
-    covL <- Rfast::cova(XsL, large = TRUE)
+    covL <- cova(XsL, large = TRUE)
   }
   
   

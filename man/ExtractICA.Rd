@@ -11,7 +11,11 @@ ExtractICA(DataList, nComp, method = "fastICA", covL = NULL, indexList = NULL)
 
 \item{nComp}{number of ICA components to extract}
 
-\item{method}{}
+\item{method}{either fastICA else EVD is used}
+
+\item{covL}{large precomputed covariance matrix, used for EVD method}
+
+\item{indexList}{list with indices for extract covariances based on cluster indices}
 }
 \value{
 a list with cluster specific independent components
