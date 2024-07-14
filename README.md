@@ -7,6 +7,7 @@
 #### Version of CICA on CRAN notes:
 
 -   CRAN v0.1.0: CICA version with ALS random start procedure
+-   CRAN v1.1.1: CICA version with all working functionalities, including EVD based estimation procedure.
 
 #### Version of CICA on GitHub:
 
@@ -27,4 +28,4 @@ This version contains:
 
 -   R v1.0.0 CICA version with all working functionalities. This version is also available on CRAN. This package version includes the papayar archived files that were made by John Muschelli.
 
--   R v1.1.0 CICA version with a fast EVD based estimation procedure. This results in an equal (or similar) clustering. Use the final clustering to seed the CICA (using method = 'fastICA') to extract independent components. 
+-   R v1.1.1 CICA version with a fast EVD based estimation procedure. This results in an equal (or similar) clustering. Use the final clustering to seed the CICA (using method = 'fastICA') to extract independent components. 
