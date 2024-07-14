@@ -10,7 +10,7 @@
 #' @keywords internal
 #' @return a list with cluster specific independent components
 ExtractICA <- function(DataList,  nComp, method = 'fastICA', covL=NULL, indexList=NULL){
-  #DataList <- lapply(DataList, FUN = scale, center = T, scale = T)
+  
 
   if(method == 'fastICA'){
     icaListCluster <- lapply(DataList, icafast, nc = nComp)
@@ -19,10 +19,6 @@ ExtractICA <- function(DataList,  nComp, method = 'fastICA', covL=NULL, indexLis
   }else{
     
     subcovs <- lapply(1:length(indexList), function(i) covL[ indexList[[i]] , indexList[[i]] ] )
-    #for(i in 1:length(indexList)){
-    #  subcov <- covL[ indexList[[i]] , indexList[[i]]]
-    #}
-    
     eigL <- lapply(subcovs, eigen.sym, k = nComp,vectors = TRUE)
     ICA_S <- lapply(seq_along(eigL), function(i) DataList[[i]] %*% eigL[[i]]$vectors)
     

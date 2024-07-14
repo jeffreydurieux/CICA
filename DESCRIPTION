@@ -1,7 +1,7 @@
 Package: CICA
 Type: Package
 Title: Clusterwise Independent Component Analysis
-Version: 1.1.0
+Version: 1.1.1
 Date: 2024-07-11
 Depends: ica, RNifti, Rfast, R (>= 4.3)
 Imports: mclust, plotly, multiway, methods, magrittr, neurobase,

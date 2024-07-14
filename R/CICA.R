@@ -189,7 +189,7 @@ CICA <- function(DataList, nComp, nClus, method = 'fastICA', RanStarts, RatStart
   nBlocks <- length(DataList)
 
   
-  # if SCA is used: first compute cov
+  # if EVD is used: first compute cov
   if(method == 'EVD'){
     groups <- rep(1:nBlocks, each = (nBlocks*ncol(DataList[[1]]))/(nBlocks))
     indexList <- split(1:(nBlocks*ncol(DataList[[1]])), groups)
@@ -324,8 +324,8 @@ CICA <- function(DataList, nComp, nClus, method = 'fastICA', RanStarts, RatStart
         SortedDataList <- ConcData(DataList = DataList, ClusVec = newclus)
 
         #### Step 2 extract group ICA parameters (only Sr is necessary ####
-        if(method == 'SCA'){
-          idl <- lapply(seq_along(1:nClus), function(i) c(indexList[newclus==i]))
+        if(method == 'EVD'){
+          idl <- lapply(seq_along(1:grid$nClus[ng]), function(i) c(indexList[newclus==i]))
           idl <- lapply(seq_along(idl), function(i) unlist(idl[[i]]))
         }else{
           covL <- NULL
